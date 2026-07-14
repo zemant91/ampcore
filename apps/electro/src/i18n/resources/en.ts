@@ -1,9 +1,8 @@
 /**
- * The only locale for now (see the porting plan: i18n is deferred).
- * Keys mirror the labelKey/titleKey/WarningKey from CalculatorDef — the
- * resolver (resolveLabel.ts) just returns the key itself if it's missing
- * here, so adding a new calculator without a translation doesn't break the
- * screen, it just shows the key instead of an empty label.
+ * Source of truth for every other locale: __tests__/resources.test.ts asserts
+ * every other resource file has exactly this key set, so a missing
+ * translation fails a test instead of silently falling back to the key
+ * string at runtime.
  */
 export const en: Record<string, string> = {
   // Formula chips (ohms_law only right now — CalculatorDef.formulaKeys)
@@ -173,16 +172,55 @@ export const en: Record<string, string> = {
   // Warnings/errors
   'error.needExactlyTwoValues': 'Enter exactly two known values.',
   'error.missingRequiredFields': 'Fill in all required fields.',
-  'error.noBreakerFitsInRange': 'No standard rating fits between Ip and Iz — increase cable cross-section.',
-  'error.noPeSizeFitsInRange': 'Required PE section exceeds the standard range.',
-  'warn.divisionByZero': 'Check your inputs — one of the values leads to division by zero.',
+  'error.noBreakerFitsInRange':
+    'No standard rating fits between Ip and Iz — increase cable cross-section.',
+  'error.noPeSizeFitsInRange':
+    'Required PE section exceeds the standard range.',
+  'warn.divisionByZero':
+    'Check your inputs — one of the values leads to division by zero.',
   'warn.voltageDropExceedsIec': 'Voltage drop exceeds the 5% IEC guideline.',
-  'warn.cableSizingNoTableFit': 'No standard cross-section fully covers this load — largest available section shown.',
-  'info.largeSectionReactanceIgnored': 'Cross-section above 50mm² — reactance is not accounted for in this formula.',
-  'warn.conduitFillExceedsLimit': 'Fill exceeds the recommended limit for this cable count.',
+  'warn.cableSizingNoTableFit':
+    'No standard cross-section fully covers this load — largest available section shown.',
+  'info.largeSectionReactanceIgnored':
+    'Cross-section above 50mm² — reactance is not accounted for in this formula.',
+  'warn.conduitFillExceedsLimit':
+    'Fill exceeds the recommended limit for this cable count.',
 
   // Paywall
   'paywall.cableChain': 'Chain cable sizing straight into breaker selection',
   'paywall.pdfExport': 'Export calculations to PDF',
   'paywall.unlimitedHistory': 'Unlimited calculation history',
+
+  // App chrome: Home
+  'ui.home.planBadge': 'FREE PLAN',
+  'ui.home.searchPlaceholder': 'Search calculators...',
+  'ui.home.noResults': 'No calculators found',
+  'ui.home.soonSectionTitle': 'Soon',
+
+  // App chrome: History
+  'ui.history.title': 'History',
+  'ui.history.clear': 'Clear',
+  'ui.history.empty': 'No calculations yet',
+
+  // App chrome: Menu ("More")
+  'ui.menu.title': 'More',
+  'ui.menu.exportPdf': 'Export to PDF',
+  'ui.menu.restorePurchases': 'Restore purchases',
+  'ui.menu.settingsRow': 'Language',
+
+  // App chrome: Paywall
+  'ui.paywall.title': 'ElectroCalc Pro',
+  'ui.paywall.unlockHeadline': 'Unlock every calculator',
+  'ui.paywall.proCalculatorsSummary':
+    '{{count}} pro calculators and unlimited history',
+  'ui.paywall.includesTitle': 'Includes',
+  'ui.paywall.ctaPlaceholder': 'Upgrade — coming soon',
+  'ui.paywall.noPaymentNotice':
+    'No payment integration yet — nothing to buy here.',
+
+  // App chrome: Settings (language)
+  'ui.common.soonBadge': 'SOON',
+
+  'ui.settings.title': 'Language',
+  'ui.settings.systemDefault': 'Detected from device — change anytime',
 };

@@ -16,6 +16,8 @@ export interface CalculatorFormProps {
   theme: ThemeTokens;
   /** labelKey -> text. The organism doesn't know about i18n, it just forwards the resolver further down */
   resolveLabel: (labelKey: string) => string;
+  /** ',' for locales that write decimals as "2,5" instead of "2.5" — see parseFieldText. Defaults to '.' */
+  decimalSeparator?: ',' | '.';
   /** fieldId, the new value in base units (undefined — field cleared/invalid) */
   onChangeValue: (fieldId: string, value: string | number | undefined) => void;
 }
@@ -27,9 +29,10 @@ export interface CalculatorFormProps {
  * needed. String options (system/material/...) can't go through toBase in
  * the first place (they're not numbers).
  */
-export function parseFieldText(field: FieldDef, text: string): number | undefined {
+export function parseFieldText(field: FieldDef, text: string, decimalSeparator: ',' | '.' = '.'): number | undefined {
   if (text.trim() === '') return undefined;
-  const parsed = Number(text);
+  const normalized = decimalSeparator === ',' ? text.replace(',', '.') : text;
+  const parsed = Number(normalized);
   if (Number.isNaN(parsed)) return undefined;
   return field.defaultUnit ? toBase(field.quantity, parsed, field.defaultUnit) : parsed;
 }
@@ -79,6 +82,7 @@ export function CalculatorForm({
   outputs,
   theme,
   resolveLabel,
+  decimalSeparator = '.',
   onChangeValue,
 }: CalculatorFormProps): ReactElement {
   const states = buildFieldCardStates(calculator.fields, values, outputs);
@@ -139,7 +143,7 @@ export function CalculatorForm({
           resolveLabel={resolveLabel}
           onChangeText={
             field.options === undefined && field.role === 'input'
-              ? (text) => onChangeValue(field.id, parseFieldText(field, text))
+              ? (text) => onChangeValue(field.id, parseFieldText(field, text, decimalSeparator))
               : undefined
           }
           onChangeOption={

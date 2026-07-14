@@ -41,6 +41,25 @@ describe('parseFieldText: field text -> number in base units', () => {
   });
 });
 
+describe('parseFieldText: locale-aware decimal separator (PL/DE/FR/IT/ES write "2,5")', () => {
+  test('decimalSeparator="," -> "2,5" reads as 2.5, not 25 and not NaN', () => {
+    expect(parseFieldText(dimensionlessField, '2,5', ',')).toBeCloseTo(2.5, 6);
+  });
+
+  test('decimalSeparator="," with a unit conversion -> "1,5" (kW) -> 1500 (base: W)', () => {
+    expect(parseFieldText(powerField, '1,5', ',')).toBe(1500);
+  });
+
+  test('default decimalSeparator (\'.\') still reads "2.5" as 2.5', () => {
+    expect(parseFieldText(dimensionlessField, '2.5')).toBeCloseTo(2.5, 6);
+  });
+
+  test('decimalSeparator="," with empty/whitespace text -> undefined (field cleared)', () => {
+    expect(parseFieldText(dimensionlessField, '', ',')).toBeUndefined();
+    expect(parseFieldText(dimensionlessField, '   ', ',')).toBeUndefined();
+  });
+});
+
 describe('buildDynamicFieldsHint: "N of 2 filled" hint text', () => {
   const dynamicCalc: CalculatorDef = {
     id: 'demo_dynamic',

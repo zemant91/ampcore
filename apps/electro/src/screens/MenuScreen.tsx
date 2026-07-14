@@ -1,7 +1,8 @@
 import type { ReactElement } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { History as HistoryIcon, FileText, Lock } from 'lucide-react-native';
+import { History as HistoryIcon, FileText, Lock, Languages } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
 import type { RootStackParamList } from '../navigation/types';
@@ -41,6 +42,7 @@ const rowIconBoxStyle = {
 
 /** A row for a feature that isn't built yet — same muted/dashed treatment as "soon" calculators on Home */
 function ComingSoonRow({ icon, label }: { icon: ReactElement; label: string }): ReactElement {
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -63,7 +65,9 @@ function ComingSoonRow({ icon, label }: { icon: ReactElement; label: string }): 
           backgroundColor: theme.colors.cardBorderMuted,
         }}
       >
-        <Text style={{ fontSize: 10, fontWeight: '700', color: theme.colors.textSecondary }}>SOON</Text>
+        <Text style={{ fontSize: 10, fontWeight: '700', color: theme.colors.textSecondary }}>
+          {t('ui.common.soonBadge')}
+        </Text>
       </View>
     </View>
   );
@@ -76,6 +80,7 @@ function ComingSoonRow({ icon, label }: { icon: ReactElement; label: string }): 
  * screen-based navigation, not a mix of modals and screens.
  */
 export function MenuScreen({ navigation }: Props): ReactElement {
+  const { t } = useTranslation();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top', 'left', 'right']}>
       <View
@@ -98,7 +103,7 @@ export function MenuScreen({ navigation }: Props): ReactElement {
             color: theme.colors.textPrimary,
           }}
         >
-          More
+          {t('ui.menu.title')}
         </Text>
       </View>
 
@@ -108,12 +113,21 @@ export function MenuScreen({ navigation }: Props): ReactElement {
             <HistoryIcon size={18} color={theme.accent} />
           </View>
           <Text style={{ flex: 1, fontFamily: theme.typography.uiFontFamily, fontSize: 15, color: theme.colors.textPrimary }}>
-            History
+            {t('ui.history.title')}
           </Text>
         </Pressable>
 
-        <ComingSoonRow icon={<FileText size={18} color={theme.colors.textSecondary} />} label="Export to PDF" />
-        <ComingSoonRow icon={<Lock size={18} color={theme.colors.textSecondary} />} label="Restore purchases" />
+        <Pressable style={rowStyle} onPress={() => navigation.navigate('Settings')} testID="menu-settings">
+          <View style={rowIconBoxStyle}>
+            <Languages size={18} color={theme.accent} />
+          </View>
+          <Text style={{ flex: 1, fontFamily: theme.typography.uiFontFamily, fontSize: 15, color: theme.colors.textPrimary }}>
+            {t('ui.menu.settingsRow')}
+          </Text>
+        </Pressable>
+
+        <ComingSoonRow icon={<FileText size={18} color={theme.colors.textSecondary} />} label={t('ui.menu.exportPdf')} />
+        <ComingSoonRow icon={<Lock size={18} color={theme.colors.textSecondary} />} label={t('ui.menu.restorePurchases')} />
       </View>
     </SafeAreaView>
   );

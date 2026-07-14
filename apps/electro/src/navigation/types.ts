@@ -6,4 +6,5 @@ export type RootStackParamList = {
   History: undefined;
   Paywall: undefined;
   Menu: undefined;
+  Settings: undefined;
 };

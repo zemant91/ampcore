@@ -12,6 +12,8 @@ export interface CalculatorScreenTemplateProps {
   warnings: WarningKey[];
   theme: ThemeTokens;
   resolveLabel: (labelKey: string) => string;
+  /** ',' for locales that write decimals as "2,5" (see CalculatorForm.parseFieldText); defaults to '.' */
+  decimalSeparator?: ',' | '.';
   onChangeValue: (fieldId: string, value: string | number | undefined) => void;
   onBack: () => void;
   onOpenHistory: () => void;
@@ -44,6 +46,7 @@ export function CalculatorScreenTemplate({
   warnings,
   theme,
   resolveLabel,
+  decimalSeparator,
   onChangeValue,
   onBack,
   onOpenHistory,
@@ -106,6 +109,7 @@ export function CalculatorScreenTemplate({
           outputs={outputs}
           theme={theme}
           resolveLabel={resolveLabel}
+          decimalSeparator={decimalSeparator}
           onChangeValue={onChangeValue}
         />
 

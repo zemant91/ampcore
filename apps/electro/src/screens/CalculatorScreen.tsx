@@ -2,12 +2,13 @@ import type { ReactElement } from 'react';
 import { useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { History } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CalculatorScreenTemplate, buildTheme } from '@calc/ui';
 import type { Values } from '@calc/engine';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
-import { resolveLabel } from '../i18n/resolveLabel';
+import { decimalSeparatorFor } from '../i18n/i18n';
 import { useCalculatorState } from '../state/useCalculatorState';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calculator'>;
@@ -22,6 +23,7 @@ const theme = buildTheme(electro.theme.accent);
  * navigation, state (useCalculatorState), and the brand.
  */
 export function CalculatorScreen({ route, navigation }: Props): ReactElement | null {
+  const { t, i18n } = useTranslation();
   const { calculatorId, initialValues } = route.params;
   const calculator = electro.calculators.find((c) => c.id === calculatorId);
 
@@ -54,7 +56,8 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
         outputs={outputs}
         warnings={warnings}
         theme={theme}
-        resolveLabel={resolveLabel}
+        resolveLabel={t}
+        decimalSeparator={decimalSeparatorFor(i18n.language)}
         onChangeValue={onChangeValue}
         onBack={() => navigation.goBack()}
         onOpenHistory={() => navigation.navigate('History')}

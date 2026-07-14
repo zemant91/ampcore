@@ -17,8 +17,10 @@ module.exports = {
     '^.+\\.mjs$': 'babel-jest',
   },
   // Jest never runs Metro, so react-native-svg-transformer doesn't apply here —
-  // .svg imports (see src/icons/index.tsx) need their own mock.
+  // .svg imports (see src/icons/index.tsx) need their own mock. react-native-localize
+  // ships its own official jest mock (real native module has no JS fallback).
   moduleNameMapper: {
     '\\.svg$': '<rootDir>/__mocks__/svgMock.js',
+    '^react-native-localize$': 'react-native-localize/mock/jest',
   },
 };

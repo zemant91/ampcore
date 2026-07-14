@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
 import type { RootStackParamList } from '../navigation/types';
@@ -24,6 +25,7 @@ const iconButtonStyle = {
 };
 
 export function HistoryScreen({ navigation }: Props): ReactElement {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -60,7 +62,7 @@ export function HistoryScreen({ navigation }: Props): ReactElement {
             fontWeight: '700',
           }}
         >
-          History
+          {t('ui.history.title')}
         </Text>
         {entries.length > 0 ? (
           <Pressable
@@ -70,7 +72,9 @@ export function HistoryScreen({ navigation }: Props): ReactElement {
             }}
             testID="history-screen-clear"
           >
-            <Text style={{ color: theme.colors.danger, fontFamily: theme.typography.uiFontFamily }}>Clear</Text>
+            <Text style={{ color: theme.colors.danger, fontFamily: theme.typography.uiFontFamily }}>
+              {t('ui.history.clear')}
+            </Text>
           </Pressable>
         ) : (
           <View style={{ width: 36 }} />
@@ -90,7 +94,7 @@ export function HistoryScreen({ navigation }: Props): ReactElement {
             style={{ color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily, textAlign: 'center' }}
             testID="history-screen-empty"
           >
-            No calculations yet
+            {t('ui.history.empty')}
           </Text>
         }
         renderItem={({ item }) => {

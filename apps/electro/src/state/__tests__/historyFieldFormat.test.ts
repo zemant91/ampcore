@@ -1,6 +1,13 @@
 import type { FieldDef } from '@calc/engine';
 import { formatFieldForHistory } from '../useCalculatorState';
 
+const dict: Record<string, string> = {
+  'field.system': 'System',
+  'system.dc': 'DC',
+  'field.voltage': 'Voltage',
+};
+const resolveLabel = (key: string) => dict[key] ?? key;
+
 describe('formatFieldForHistory: option fields resolve labelKey, not the raw stored value', () => {
   const systemField: FieldDef = {
     id: 'system',
@@ -15,7 +22,7 @@ describe('formatFieldForHistory: option fields resolve labelKey, not the raw sto
   };
 
   test('system="dc" -> value "DC" (resolved), not the raw "dc", and no redundant unit', () => {
-    const result = formatFieldForHistory(systemField, { system: 'dc' });
+    const result = formatFieldForHistory(systemField, { system: 'dc' }, resolveLabel);
     expect(result.value).toBe('DC');
     expect(result.unit).toBe('');
   });
@@ -29,7 +36,7 @@ describe('formatFieldForHistory: option fields resolve labelKey, not the raw sto
   };
 
   test('non-option numeric field -> raw value stringified, unit kept', () => {
-    const result = formatFieldForHistory(voltageField, { voltage: 11 });
+    const result = formatFieldForHistory(voltageField, { voltage: 11 }, resolveLabel);
     expect(result.value).toBe('11');
     expect(result.unit).toBe('V');
   });

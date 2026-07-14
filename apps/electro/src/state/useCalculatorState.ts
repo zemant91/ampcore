@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { CalculatorDef, FieldDef, Values, WarningKey } from '@calc/engine';
 import { resolveFieldLabel } from '@calc/engine';
 import { createDataAccess } from '@calc/data';
 import { saveEntry } from '../lib/history';
 import type { HistoryField } from '../lib/history';
-import { resolveLabel } from '../i18n/resolveLabel';
 import { applyDynamicFieldChange } from './dynamicFieldEviction';
 import type { DynamicFieldState } from './dynamicFieldEviction';
 
@@ -23,7 +23,11 @@ export interface CalculatorState {
  * the raw stored value — and skips the unit suffix in that case, since the
  * resolved label already reads naturally on its own (e.g. "20°C").
  */
-export function formatFieldForHistory(field: FieldDef, mergedValues: Values): HistoryField {
+export function formatFieldForHistory(
+  field: FieldDef,
+  mergedValues: Values,
+  resolveLabel: (key: string) => string,
+): HistoryField {
   const rawValue = mergedValues[field.id];
   const option = field.options?.find((o) => o.value === rawValue);
   return {
@@ -43,6 +47,7 @@ export function useCalculatorState(
   calculator: CalculatorDef,
   initialValues?: Partial<Values>,
 ): CalculatorState {
+  const { t } = useTranslation();
   const [formState, setFormState] = useState<DynamicFieldState>(() => {
     const initial: Values = { ...initialValues };
     const order = (calculator.dynamicRoleFieldIds ?? []).filter((id) => initial[id] !== undefined);
@@ -93,17 +98,17 @@ export function useCalculatorState(
         id: Math.random().toString(36).slice(2, 10),
         timestamp: Date.now(),
         calculatorId: calculator.id,
-        calculatorName: resolveLabel(calculator.titleKey),
+        calculatorName: t(calculator.titleKey),
         fields: calculator.fields
           .filter((f) => f.role === 'input' && values[f.id] !== undefined)
-          .map((f) => formatFieldForHistory(f, mergedValues)),
-        result: formatFieldForHistory(primaryOutputField, mergedValues),
+          .map((f) => formatFieldForHistory(f, mergedValues, t)),
+        result: formatFieldForHistory(primaryOutputField, mergedValues, t),
       });
       lastSavedKeyRef.current = dedupeKey;
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [calculator, outputs, values]);
+  }, [calculator, outputs, values, t]);
 
   return { values, outputs, warnings, onChangeValue };
 }

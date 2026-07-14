@@ -2,11 +2,11 @@ import type { ReactElement } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Check, Lock } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
-import { resolveLabel } from '../i18n/resolveLabel';
 import { HOME_ICONS } from '../icons';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Paywall'>;
@@ -29,6 +29,7 @@ const iconButtonStyle = {
  * charge anything. Wire it up to a real purchase flow when there is one.
  */
 export function PaywallScreen({ navigation }: Props): ReactElement {
+  const { t } = useTranslation();
   const proCalculators = electro.calculators.filter((calc) => calc.tier === 'pro');
 
   return (
@@ -48,7 +49,7 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
                   color: theme.colors.textPrimary,
                 }}
               >
-                ElectroCalc Pro
+                {t('ui.paywall.title')}
               </Text>
             </View>
 
@@ -70,7 +71,7 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
                   color: theme.colors.textPrimary,
                 }}
               >
-                Unlock every calculator
+                {t('ui.paywall.unlockHeadline')}
               </Text>
               <Text
                 style={{
@@ -80,7 +81,7 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
                   textAlign: 'center',
                 }}
               >
-                {proCalculators.length} pro calculators and unlimited history
+                {t('ui.paywall.proCalculatorsSummary', { count: proCalculators.length })}
               </Text>
             </View>
 
@@ -102,7 +103,7 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
                         color: isUnbuilt ? theme.colors.textSecondary : theme.colors.textPrimary,
                       }}
                     >
-                      {resolveLabel(key)}
+                      {t(key)}
                     </Text>
                     {isUnbuilt && (
                       <View
@@ -113,7 +114,9 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
                           backgroundColor: theme.colors.cardBorderMuted,
                         }}
                       >
-                        <Text style={{ fontSize: 10, fontWeight: '700', color: theme.colors.textSecondary }}>SOON</Text>
+                        <Text style={{ fontSize: 10, fontWeight: '700', color: theme.colors.textSecondary }}>
+                          {t('ui.common.soonBadge')}
+                        </Text>
                       </View>
                     )}
                   </View>
@@ -133,7 +136,7 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
                     textTransform: 'uppercase',
                   }}
                 >
-                  Includes
+                  {t('ui.paywall.includesTitle')}
                 </Text>
                 {proCalculators.map((calc) => {
                   const Icon = HOME_ICONS[calc.id];
@@ -153,7 +156,7 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
                       <Text
                         style={{ flex: 1, fontFamily: theme.typography.uiFontFamily, fontSize: 14, color: theme.colors.textPrimary }}
                       >
-                        {resolveLabel(calc.titleKey)}
+                        {t(calc.titleKey)}
                       </Text>
                     </View>
                   );
@@ -171,12 +174,14 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
                 }}
                 testID="paywall-cta-placeholder"
               >
-                <Text style={{ fontWeight: '700', color: theme.colors.textSecondary }}>Upgrade — coming soon</Text>
+                <Text style={{ fontWeight: '700', color: theme.colors.textSecondary }}>
+                  {t('ui.paywall.ctaPlaceholder')}
+                </Text>
               </View>
               <Text
                 style={{ textAlign: 'center', fontSize: 11, color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily }}
               >
-                No payment integration yet — nothing to buy here.
+                {t('ui.paywall.noPaymentNotice')}
               </Text>
             </View>
           </View>

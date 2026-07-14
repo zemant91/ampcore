@@ -3,12 +3,12 @@ import { useMemo, useState } from 'react';
 import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search, Lock, Settings } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
 import type { CalculatorDef } from '@calc/engine';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
-import { resolveLabel } from '../i18n/resolveLabel';
 import { HOME_ICONS } from '../icons';
 
 /** Not a real category — marks the flat search-results list so renderItem skips the category caption */
@@ -75,6 +75,7 @@ function CalculatorIcon({ iconId, muted }: { iconId: string; muted?: boolean }):
  * BrandConfig, exactly as @calc/engine intends).
  */
 export function HomeScreen({ navigation }: Props): ReactElement {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const sections = useMemo(() => groupByCategory(electro.calculators), []);
 
@@ -82,11 +83,11 @@ export function HomeScreen({ navigation }: Props): ReactElement {
   const visibleSections = useMemo(() => {
     if (trimmedQuery === '') return sections;
     const matches = electro.calculators.filter((calc) => {
-      const haystack = `${resolveLabel(calc.titleKey)} ${resolveLabel(calc.descriptionKey)}`.toLowerCase();
+      const haystack = `${t(calc.titleKey)} ${t(calc.descriptionKey)}`.toLowerCase();
       return haystack.includes(trimmedQuery);
     });
     return [{ category: SEARCH_RESULTS, items: matches }];
-  }, [trimmedQuery, sections]);
+  }, [trimmedQuery, sections, t]);
   const isSearching = trimmedQuery !== '';
 
   return (
@@ -130,7 +131,7 @@ export function HomeScreen({ navigation }: Props): ReactElement {
             testID="home-plan-badge"
           >
             <Lock size={11} color={theme.colors.background} />
-            <Text style={{ fontSize: 10, fontWeight: '700', color: theme.colors.background }}>FREE PLAN</Text>
+            <Text style={{ fontSize: 10, fontWeight: '700', color: theme.colors.background }}>{t('ui.home.planBadge')}</Text>
           </Pressable>
           <Pressable
             style={{
@@ -164,7 +165,7 @@ export function HomeScreen({ navigation }: Props): ReactElement {
         <TextInput
           value={query}
           onChangeText={setQuery}
-          placeholder="Search calculators..."
+          placeholder={t('ui.home.searchPlaceholder')}
           placeholderTextColor={theme.colors.textSecondary}
           style={{
             flex: 1,
@@ -197,7 +198,7 @@ export function HomeScreen({ navigation }: Props): ReactElement {
                   textTransform: 'uppercase',
                 }}
               >
-                {resolveLabel(`category.${section.category}`)}
+                {t(`category.${section.category}`)}
               </Text>
             )}
             {section.category === SEARCH_RESULTS && section.items.length === 0 && (
@@ -205,7 +206,7 @@ export function HomeScreen({ navigation }: Props): ReactElement {
                 style={{ color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily, fontSize: 14 }}
                 testID="home-search-empty"
               >
-                No calculators found
+                {t('ui.home.noResults')}
               </Text>
             )}
             <View style={{ gap: theme.layout.spacingUnit }}>
@@ -227,7 +228,7 @@ export function HomeScreen({ navigation }: Props): ReactElement {
                           fontWeight: '700',
                         }}
                       >
-                        {resolveLabel(calc.titleKey)}
+                        {t(calc.titleKey)}
                       </Text>
                       {calc.tier === 'pro' && (
                         <Lock size={12} color={theme.colors.textSecondary} testID={`home-calculator-${calc.id}-pro-lock`} />
@@ -236,7 +237,7 @@ export function HomeScreen({ navigation }: Props): ReactElement {
                     <Text
                       style={{ color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily, fontSize: 13 }}
                     >
-                      {resolveLabel(calc.descriptionKey)}
+                      {t(calc.descriptionKey)}
                     </Text>
                   </View>
                 </Pressable>
@@ -257,7 +258,7 @@ export function HomeScreen({ navigation }: Props): ReactElement {
                   textTransform: 'uppercase',
                 }}
               >
-                Soon
+                {t('ui.home.soonSectionTitle')}
               </Text>
               {electro.upcoming.map((item) => (
                 <View
@@ -277,10 +278,10 @@ export function HomeScreen({ navigation }: Props): ReactElement {
                   <CalculatorIcon iconId={item.icon} muted />
                   <View style={{ flex: 1, gap: 4 }}>
                     <Text style={{ color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily, fontSize: 16 }}>
-                      {resolveLabel(item.titleKey)}
+                      {t(item.titleKey)}
                     </Text>
                     <Text style={{ color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily, fontSize: 13 }}>
-                      {resolveLabel(item.descriptionKey)}
+                      {t(item.descriptionKey)}
                     </Text>
                   </View>
                 </View>
