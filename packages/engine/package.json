@@ -1,0 +1,12 @@
+{
+  "name": "@calc/engine",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A pure TS engine: CalculatorDef types, the unit system. Zero dependencies on React Native.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch"
+  }
+}

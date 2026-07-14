@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@calc/engine": ["packages/engine/src/index.ts"],
+      "@calc/data": ["packages/data/src/index.ts"],
+      "@calc/calculators-electrical": ["packages/calculators/electrical/src/index.ts"],
+      "@calc/ui": ["packages/ui/src/index.ts"]
+    }
+  },
+  "include": ["packages/**/src", "packages/**/__tests__", "apps/**/src"]
+}

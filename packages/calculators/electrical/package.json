@@ -1,0 +1,16 @@
+{
+  "name": "@calc/calculators-electrical",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Calculator configs for the \"electrical\" domain (IEC/EU) — ElectroCalc EU",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch"
+  },
+  "dependencies": {
+    "@calc/engine": "workspace:*",
+    "@calc/data": "workspace:*"
+  }
+}
