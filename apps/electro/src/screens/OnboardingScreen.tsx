@@ -3,11 +3,29 @@ import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { Zap, ShieldAlert } from 'lucide-react-native';
 import { buildTheme } from '@calc/ui';
 import { electro } from '../brand';
 import { completeOnboarding } from '../lib/settings';
 
 const theme = buildTheme(electro.theme.accent);
+
+/**
+ * A big icon per slide, not real illustration artwork — placeholder visual
+ * weight so a slide isn't just two lines of text floating in a mostly-empty
+ * screen. Swap for real illustrations later; the accent-tinted circle
+ * treatment matches PaywallScreen's Lock icon already.
+ */
+const illustrationBoxStyle = {
+  alignSelf: 'center' as const,
+  width: 96,
+  height: 96,
+  borderRadius: 48,
+  alignItems: 'center' as const,
+  justifyContent: 'center' as const,
+  backgroundColor: `${theme.accent}20`,
+  marginBottom: theme.layout.spacingUnit,
+};
 
 interface Props {
   onComplete: () => void;
@@ -78,6 +96,9 @@ export function OnboardingScreen({ onComplete }: Props): ReactElement {
             style={{ gap: theme.layout.spacingUnit }}
             testID="onboarding-slide-welcome"
           >
+            <View style={illustrationBoxStyle}>
+              <Zap size={44} color={theme.accent} />
+            </View>
             <Text
               style={{
                 fontFamily: theme.typography.uiFontFamily,
@@ -106,6 +127,9 @@ export function OnboardingScreen({ onComplete }: Props): ReactElement {
             style={{ gap: theme.layout.spacingUnit }}
             testID="onboarding-slide-disclaimer"
           >
+            <View style={illustrationBoxStyle}>
+              <ShieldAlert size={44} color={theme.accent} />
+            </View>
             <Text
               style={{
                 fontFamily: theme.typography.uiFontFamily,
