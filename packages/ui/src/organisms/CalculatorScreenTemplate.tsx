@@ -12,6 +12,8 @@ export interface CalculatorScreenTemplateProps {
   warnings: WarningKey[];
   theme: ThemeTokens;
   resolveLabel: (labelKey: string) => string;
+  /** i18n key for a persistent disclaimer footer (e.g. BrandConfig.legalDisclaimerKey) — omit to render no footer at all */
+  disclaimerKey?: string;
   /** ',' for locales that write decimals as "2,5" (see CalculatorForm.parseFieldText); defaults to '.' */
   decimalSeparator?: ',' | '.';
   /** Which unit each field parses/displays in (see @calc/engine's unitForField) — defaults to 'metric' */
@@ -48,6 +50,7 @@ export function CalculatorScreenTemplate({
   warnings,
   theme,
   resolveLabel,
+  disclaimerKey,
   decimalSeparator,
   unitsSystem,
   onChangeValue,
@@ -94,10 +97,16 @@ export function CalculatorScreenTemplate({
         </Pressable>
       </View>
 
-      {/* flexGrow: 1 on the content container is the whole trick: it lets
-          short forms fill the screen without looking clipped/top-anchored,
-          while longer forms (cable_sizing) scroll normally past the fold. */}
+      {/* flex: 1 on the ScrollView itself makes it (not the disclaimer
+          footer below) absorb all remaining vertical space — the footer
+          then sits in its own natural-height slot, never overlapping
+          scrolled content, no manual bottom-padding math needed. flexGrow: 1
+          on the content container is the second half of the trick: it lets
+          short forms fill that remaining space without looking clipped/
+          top-anchored, while longer forms (cable_sizing) scroll normally
+          past the fold. */}
       <ScrollView
+        style={{ flex: 1 }}
         contentContainerStyle={{
           flexGrow: 1,
           gap: theme.layout.spacingUnit * 2,
@@ -157,6 +166,31 @@ export function CalculatorScreenTemplate({
           </View>
         )}
       </ScrollView>
+
+      {disclaimerKey !== undefined && (
+        <View
+          style={{
+            paddingHorizontal: theme.layout.spacingUnit * 2,
+            paddingVertical: theme.layout.spacingUnit,
+            borderTopWidth: 1,
+            borderTopColor: theme.colors.cardBorderMuted,
+            backgroundColor: theme.colors.background,
+          }}
+          testID="calculator-screen-disclaimer"
+        >
+          <Text
+            style={{
+              fontFamily: theme.typography.uiFontFamily,
+              fontSize: 11,
+              lineHeight: 15,
+              color: theme.colors.textSecondary,
+              textAlign: 'center',
+            }}
+          >
+            {resolveLabel(disclaimerKey)}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }

@@ -49,7 +49,7 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.colors.background }}
-      edges={['top', 'left', 'right']}
+      edges={['top', 'left', 'right', 'bottom']}
     >
       <CalculatorScreenTemplate
         calculator={calculator}
@@ -58,6 +58,7 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
         warnings={warnings}
         theme={theme}
         resolveLabel={t}
+        disclaimerKey={electro.legalDisclaimerKey}
         decimalSeparator={decimalSeparatorFor(i18n.language)}
         unitsSystem={getUnitsSystem(electro.defaultUnitsSystem)}
         onChangeValue={onChangeValue}
