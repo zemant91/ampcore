@@ -180,7 +180,7 @@ export const fr: Record<string, string> = {
   'ui.menu.title': 'Plus',
   'ui.menu.exportPdf': 'Exporter en PDF',
   'ui.menu.restorePurchases': 'Restaurer les achats',
-  'ui.menu.settingsRow': 'Langue',
+  'ui.menu.settingsRow': 'Paramètres',
 
   'ui.paywall.title': 'AmpCore Pro',
   'ui.paywall.unlockHeadline': 'Débloquez tous les calculateurs',
@@ -193,7 +193,8 @@ export const fr: Record<string, string> = {
 
   'ui.common.soonBadge': 'BIENTÔT',
 
-  'ui.settings.title': 'Langue',
+  'ui.settings.title': 'Paramètres',
+  'ui.settings.languageTitle': 'Langue',
   'ui.settings.systemDefault':
     "Détectée depuis l'appareil — modifiable à tout moment",
 

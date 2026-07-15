@@ -177,7 +177,7 @@ export const pl: Record<string, string> = {
   'ui.menu.title': 'Więcej',
   'ui.menu.exportPdf': 'Eksport do PDF',
   'ui.menu.restorePurchases': 'Przywróć zakupy',
-  'ui.menu.settingsRow': 'Język',
+  'ui.menu.settingsRow': 'Ustawienia',
 
   'ui.paywall.title': 'AmpCore Pro',
   'ui.paywall.unlockHeadline': 'Odblokuj wszystkie kalkulatory',
@@ -190,7 +190,8 @@ export const pl: Record<string, string> = {
 
   'ui.common.soonBadge': 'WKRÓTCE',
 
-  'ui.settings.title': 'Język',
+  'ui.settings.title': 'Ustawienia',
+  'ui.settings.languageTitle': 'Język',
   'ui.settings.systemDefault': 'Wykryto z urządzenia — zmień w każdej chwili',
 
   'legal.disclaimer':

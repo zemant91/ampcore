@@ -207,7 +207,7 @@ export const en: Record<string, string> = {
   'ui.menu.title': 'More',
   'ui.menu.exportPdf': 'Export to PDF',
   'ui.menu.restorePurchases': 'Restore purchases',
-  'ui.menu.settingsRow': 'Language',
+  'ui.menu.settingsRow': 'Settings',
 
   // App chrome: Paywall
   'ui.paywall.title': 'AmpCore Pro',
@@ -222,7 +222,8 @@ export const en: Record<string, string> = {
   // App chrome: Settings (language)
   'ui.common.soonBadge': 'SOON',
 
-  'ui.settings.title': 'Language',
+  'ui.settings.title': 'Settings',
+  'ui.settings.languageTitle': 'Language',
   'ui.settings.systemDefault': 'Detected from device — change anytime',
 
   // Onboarding — brand content (BrandConfig.legalDisclaimerKey / onboarding.*)

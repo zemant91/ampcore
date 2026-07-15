@@ -61,6 +61,18 @@ const rowStyle = {
   backgroundColor: theme.colors.cardSurface,
 };
 
+const sectionHeaderStyle = {
+  color: theme.colors.textSecondary,
+  fontFamily: theme.typography.uiFontFamily,
+  fontSize: 12,
+  fontWeight: '700' as const,
+  letterSpacing: 1,
+  textTransform: 'uppercase' as const,
+  paddingHorizontal: theme.layout.spacingUnit * 2,
+  paddingTop: theme.layout.spacingUnit * 2.5,
+  paddingBottom: theme.layout.spacingUnit,
+};
+
 /** Each language's own name, in that language — not translated per active locale, so a user lost in the wrong language can still find their own */
 const LANGUAGE_NAMES: Record<SupportedLanguage, string> = {
   en: 'English',
@@ -72,10 +84,13 @@ const LANGUAGE_NAMES: Record<SupportedLanguage, string> = {
 };
 
 /**
- * Two settings so far: language (overrides the auto-detected device
- * locale — see detectInitialLanguage in i18n.ts) and units system (set at
- * onboarding, changeable here — the onboarding units slide's hint promises
- * exactly this: "You can change this anytime in Settings").
+ * A general Settings screen, not a language-specific one — two peer
+ * sections so far: Language (overrides the auto-detected device locale —
+ * see detectInitialLanguage in i18n.ts) and Units (set at onboarding,
+ * changeable here — the onboarding units slide's hint promises exactly
+ * this: "You can change this anytime in Settings"). Each section gets its
+ * own header; neither is "the" screen the way Language used to be before
+ * Units was added here.
  */
 export function SettingsScreen({ navigation }: Props): ReactElement {
   const { t, i18n } = useTranslation();
@@ -108,6 +123,8 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
           {t('ui.settings.title')}
         </Text>
       </View>
+
+      <Text style={{ ...sectionHeaderStyle, paddingTop: 0 }}>{t('ui.settings.languageTitle')}</Text>
 
       <Text
         style={{
@@ -147,21 +164,7 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
         })}
       </View>
 
-      <Text
-        style={{
-          color: theme.colors.textSecondary,
-          fontFamily: theme.typography.uiFontFamily,
-          fontSize: 12,
-          fontWeight: '700',
-          letterSpacing: 1,
-          textTransform: 'uppercase',
-          paddingHorizontal: theme.layout.spacingUnit * 2,
-          paddingTop: theme.layout.spacingUnit * 2.5,
-          paddingBottom: theme.layout.spacingUnit,
-        }}
-      >
-        {t('ui.onboarding.unitsTitle')}
-      </Text>
+      <Text style={sectionHeaderStyle}>{t('ui.onboarding.unitsTitle')}</Text>
 
       <View style={{ gap: theme.layout.spacingUnit, paddingHorizontal: theme.layout.spacingUnit * 2 }}>
         {UNITS_SYSTEMS.map((system) => {

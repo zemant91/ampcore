@@ -180,7 +180,7 @@ export const de: Record<string, string> = {
   'ui.menu.title': 'Mehr',
   'ui.menu.exportPdf': 'Als PDF exportieren',
   'ui.menu.restorePurchases': 'Käufe wiederherstellen',
-  'ui.menu.settingsRow': 'Sprache',
+  'ui.menu.settingsRow': 'Einstellungen',
 
   'ui.paywall.title': 'AmpCore Pro',
   'ui.paywall.unlockHeadline': 'Alle Rechner freischalten',
@@ -193,7 +193,8 @@ export const de: Record<string, string> = {
 
   'ui.common.soonBadge': 'DEMNÄCHST',
 
-  'ui.settings.title': 'Sprache',
+  'ui.settings.title': 'Einstellungen',
+  'ui.settings.languageTitle': 'Sprache',
   'ui.settings.systemDefault': 'Vom Gerät erkannt — jederzeit änderbar',
 
   'legal.disclaimer':
