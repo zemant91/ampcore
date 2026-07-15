@@ -1,12 +1,17 @@
 import type { ReactElement } from 'react';
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Check } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
-import { DIFFERING_QUANTITIES, METRIC_UNIT, unitForField, displayUnit } from '@calc/engine';
+import {
+  DIFFERING_QUANTITIES,
+  METRIC_UNIT,
+  unitForField,
+  displayUnit,
+} from '@calc/engine';
 import type { Quantity, UnitsSystem } from '@calc/engine';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
@@ -32,7 +37,7 @@ const QUANTITY_LABEL_KEY: Partial<Record<Quantity, string>> = {
  * aren't translated anywhere else in the app either.
  */
 function unitsSummary(system: UnitsSystem, t: (key: string) => string): string {
-  return DIFFERING_QUANTITIES.map((quantity) => {
+  return DIFFERING_QUANTITIES.map(quantity => {
     const unit = unitForField(quantity, METRIC_UNIT[quantity]!, system);
     return `${t(QUANTITY_LABEL_KEY[quantity]!)}: ${displayUnit(unit)}`;
   }).join(' · ');
@@ -99,7 +104,10 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.colors.background }}
+      edges={['top', 'left', 'right']}
+    >
       <View
         style={{
           flexDirection: 'row',
@@ -108,8 +116,14 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
           padding: theme.layout.spacingUnit * 2,
         }}
       >
-        <Pressable style={iconButtonStyle} onPress={() => navigation.goBack()} testID="settings-back">
-          <Text style={{ color: theme.colors.textSecondary, fontSize: 18 }}>‹</Text>
+        <Pressable
+          style={iconButtonStyle}
+          onPress={() => navigation.goBack()}
+          testID="settings-back"
+        >
+          <Text style={{ color: theme.colors.textSecondary, fontSize: 18 }}>
+            ‹
+          </Text>
         </Pressable>
         <Text
           style={{
@@ -124,87 +138,115 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
         </Text>
       </View>
 
-      <Text style={{ ...sectionHeaderStyle, paddingTop: 0 }}>{t('ui.settings.languageTitle')}</Text>
-
-      <Text
-        style={{
-          color: theme.colors.textSecondary,
-          fontFamily: theme.typography.uiFontFamily,
-          fontSize: 13,
-          paddingHorizontal: theme.layout.spacingUnit * 2,
-          paddingBottom: theme.layout.spacingUnit,
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: theme.layout.spacingUnit * 2,
         }}
       >
-        {t('ui.settings.systemDefault')}
-      </Text>
+        <Text style={{ ...sectionHeaderStyle, paddingTop: 0 }}>
+          {t('ui.settings.languageTitle')}
+        </Text>
 
-      <View style={{ gap: theme.layout.spacingUnit, paddingHorizontal: theme.layout.spacingUnit * 2 }}>
-        {SUPPORTED_LANGUAGES.map((code) => {
-          const active = i18n.language === code;
-          return (
-            <Pressable
-              key={code}
-              style={rowStyle}
-              onPress={() => setLanguage(code)}
-              testID={`settings-language-${code}`}
-            >
-              <Text
-                style={{
-                  fontFamily: theme.typography.uiFontFamily,
-                  fontSize: 15,
-                  color: active ? theme.colors.textPrimary : theme.colors.textSecondary,
-                  fontWeight: active ? '700' : '400',
-                }}
+        <Text
+          style={{
+            color: theme.colors.textSecondary,
+            fontFamily: theme.typography.uiFontFamily,
+            fontSize: 13,
+            paddingHorizontal: theme.layout.spacingUnit * 2,
+            paddingBottom: theme.layout.spacingUnit,
+          }}
+        >
+          {t('ui.settings.systemDefault')}
+        </Text>
+
+        <View
+          style={{
+            gap: theme.layout.spacingUnit,
+            paddingHorizontal: theme.layout.spacingUnit * 2,
+          }}
+        >
+          {SUPPORTED_LANGUAGES.map(code => {
+            const active = i18n.language === code;
+            return (
+              <Pressable
+                key={code}
+                style={rowStyle}
+                onPress={() => setLanguage(code)}
+                testID={`settings-language-${code}`}
               >
-                {LANGUAGE_NAMES[code]}
-              </Text>
-              {active && <Check size={18} color={theme.accent} />}
-            </Pressable>
-          );
-        })}
-      </View>
-
-      <Text style={sectionHeaderStyle}>{t('ui.onboarding.unitsTitle')}</Text>
-
-      <View style={{ gap: theme.layout.spacingUnit, paddingHorizontal: theme.layout.spacingUnit * 2 }}>
-        {UNITS_SYSTEMS.map((system) => {
-          const active = unitsSystem === system;
-          return (
-            <Pressable
-              key={system}
-              style={{ ...rowStyle, paddingVertical: theme.layout.spacingUnit * 1.5 }}
-              onPress={() => {
-                setUnitsSystem(system);
-                setUnitsSystemState(system);
-              }}
-              testID={`settings-units-${system}`}
-            >
-              <View style={{ flex: 1, gap: 2 }}>
                 <Text
                   style={{
                     fontFamily: theme.typography.uiFontFamily,
                     fontSize: 15,
-                    color: active ? theme.colors.textPrimary : theme.colors.textSecondary,
+                    color: active
+                      ? theme.colors.textPrimary
+                      : theme.colors.textSecondary,
                     fontWeight: active ? '700' : '400',
                   }}
                 >
-                  {system === 'metric' ? t('ui.onboarding.unitsMetric') : t('ui.onboarding.unitsImperial')}
+                  {LANGUAGE_NAMES[code]}
                 </Text>
-                <Text
-                  style={{
-                    fontFamily: theme.typography.uiFontFamily,
-                    fontSize: 12,
-                    color: theme.colors.textSecondary,
-                  }}
-                >
-                  {unitsSummary(system, t)}
-                </Text>
-              </View>
-              {active && <Check size={18} color={theme.accent} />}
-            </Pressable>
-          );
-        })}
-      </View>
+                {active && <Check size={18} color={theme.accent} />}
+              </Pressable>
+            );
+          })}
+        </View>
+
+        <Text style={sectionHeaderStyle}>{t('ui.onboarding.unitsTitle')}</Text>
+
+        <View
+          style={{
+            gap: theme.layout.spacingUnit,
+            paddingHorizontal: theme.layout.spacingUnit * 2,
+          }}
+        >
+          {UNITS_SYSTEMS.map(system => {
+            const active = unitsSystem === system;
+            return (
+              <Pressable
+                key={system}
+                style={{
+                  ...rowStyle,
+                  paddingVertical: theme.layout.spacingUnit * 1.5,
+                }}
+                onPress={() => {
+                  setUnitsSystem(system);
+                  setUnitsSystemState(system);
+                }}
+                testID={`settings-units-${system}`}
+              >
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Text
+                    style={{
+                      fontFamily: theme.typography.uiFontFamily,
+                      fontSize: 15,
+                      color: active
+                        ? theme.colors.textPrimary
+                        : theme.colors.textSecondary,
+                      fontWeight: active ? '700' : '400',
+                    }}
+                  >
+                    {system === 'metric'
+                      ? t('ui.onboarding.unitsMetric')
+                      : t('ui.onboarding.unitsImperial')}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: theme.typography.uiFontFamily,
+                      fontSize: 12,
+                      color: theme.colors.textSecondary,
+                    }}
+                  >
+                    {unitsSummary(system, t)}
+                  </Text>
+                </View>
+                {active && <Check size={18} color={theme.accent} />}
+              </Pressable>
+            );
+          })}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
