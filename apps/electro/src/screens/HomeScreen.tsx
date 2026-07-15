@@ -46,6 +46,29 @@ const cardStyle = {
   backgroundColor: theme.colors.cardSurface,
 };
 
+/**
+ * Pro-tier calculators are fully built, but the paywall has no real payment
+ * integration behind it yet (see PaywallScreen) — so right now "pro" would
+ * actually mean "free for anyone who taps in," not a real gate. Until real
+ * payment exists, these render locked/non-interactive with a SOON badge —
+ * same visual language as MenuScreen's ComingSoonRow — instead of silently
+ * giving away calculators the brand intends to sell.
+ */
+const lockedCardStyle = {
+  ...cardStyle,
+  backgroundColor: 'transparent',
+  borderWidth: 1,
+  borderStyle: 'dashed' as const,
+  borderColor: theme.colors.cardBorderMuted,
+};
+
+const soonBadgeStyle = {
+  paddingHorizontal: theme.layout.spacingUnit,
+  paddingVertical: 4,
+  borderRadius: 6,
+  backgroundColor: theme.colors.cardBorderMuted,
+};
+
 const iconBoxStyle = {
   width: 40,
   height: 40,
@@ -210,38 +233,49 @@ export function HomeScreen({ navigation }: Props): ReactElement {
               </Text>
             )}
             <View style={{ gap: theme.layout.spacingUnit }}>
-              {section.items.map((calc) => (
-                <Pressable
-                  key={calc.id}
-                  style={cardStyle}
-                  onPress={() => navigation.navigate('Calculator', { calculatorId: calc.id })}
-                  testID={`home-calculator-${calc.id}`}
-                >
-                  <CalculatorIcon iconId={calc.id} />
-                  <View style={{ flex: 1, gap: 4 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              {section.items.map((calc) => {
+                const locked = calc.tier === 'pro';
+                return (
+                  <Pressable
+                    key={calc.id}
+                    style={locked ? lockedCardStyle : cardStyle}
+                    onPress={locked ? undefined : () => navigation.navigate('Calculator', { calculatorId: calc.id })}
+                    disabled={locked}
+                    testID={`home-calculator-${calc.id}`}
+                  >
+                    <CalculatorIcon iconId={calc.id} muted={locked} />
+                    <View style={{ flex: 1, gap: 4 }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Text
+                          style={{
+                            color: locked ? theme.colors.textSecondary : theme.colors.textPrimary,
+                            fontFamily: theme.typography.uiFontFamily,
+                            fontSize: 16,
+                            fontWeight: '700',
+                          }}
+                        >
+                          {t(calc.titleKey)}
+                        </Text>
+                        {locked && (
+                          <Lock size={12} color={theme.colors.textSecondary} testID={`home-calculator-${calc.id}-pro-lock`} />
+                        )}
+                      </View>
                       <Text
-                        style={{
-                          color: theme.colors.textPrimary,
-                          fontFamily: theme.typography.uiFontFamily,
-                          fontSize: 16,
-                          fontWeight: '700',
-                        }}
+                        style={{ color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily, fontSize: 13 }}
                       >
-                        {t(calc.titleKey)}
+                        {t(calc.descriptionKey)}
                       </Text>
-                      {calc.tier === 'pro' && (
-                        <Lock size={12} color={theme.colors.textSecondary} testID={`home-calculator-${calc.id}-pro-lock`} />
-                      )}
                     </View>
-                    <Text
-                      style={{ color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily, fontSize: 13 }}
-                    >
-                      {t(calc.descriptionKey)}
-                    </Text>
-                  </View>
-                </Pressable>
-              ))}
+                    {locked && (
+                      <View style={soonBadgeStyle} testID={`home-calculator-${calc.id}-soon`}>
+                        <Text style={{ fontSize: 10, fontWeight: '700', color: theme.colors.textSecondary }}>
+                          {t('ui.common.soonBadge')}
+                        </Text>
+                      </View>
+                    )}
+                  </Pressable>
+                );
+              })}
             </View>
           </View>
         )}
