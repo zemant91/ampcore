@@ -195,4 +195,19 @@ export const fr: Record<string, string> = {
   'ui.settings.title': 'Langue',
   'ui.settings.systemDefault':
     "Détectée depuis l'appareil — modifiable à tout moment",
+
+  'legal.disclaimer':
+    'Les résultats sont fournis à titre indicatif uniquement. La responsabilité de la conception incombe à un professionnel qualifié. Vérifiez les normes en vigueur dans votre pays.',
+  'onboarding.welcome.title': 'Conçu pour la CEI',
+  'onboarding.welcome.body':
+    "Chaque calculateur suit la CEI 60364 et les pratiques européennes — pas une application NEC américaine avec conversion d'unités greffée.",
+
+  'ui.onboarding.next': 'Suivant',
+  'ui.onboarding.iUnderstand': "J'ai compris",
+  'ui.onboarding.unitsTitle': 'Unités',
+  'ui.onboarding.unitsHint':
+    'Vous pouvez modifier ce choix à tout moment dans les paramètres',
+  'ui.onboarding.unitsMetric': 'Métrique',
+  'ui.onboarding.unitsImperial': 'Impérial',
+  'ui.onboarding.disclaimerTitle': 'Avant de commencer',
 };

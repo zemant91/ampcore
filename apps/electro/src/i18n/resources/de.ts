@@ -194,4 +194,19 @@ export const de: Record<string, string> = {
 
   'ui.settings.title': 'Sprache',
   'ui.settings.systemDefault': 'Vom Gerät erkannt — jederzeit änderbar',
+
+  'legal.disclaimer':
+    'Ergebnisse dienen nur als Referenz. Die Planungsverantwortung liegt bei einer qualifizierten Fachkraft. Prüfen Sie die in Ihrem Land geltenden Normen.',
+  'onboarding.welcome.title': 'Für IEC entwickelt',
+  'onboarding.welcome.body':
+    'Jeder Rechner folgt IEC 60364 und europäischer Praxis — keine US-NEC-App mit angeflanschter Einheitenumrechnung.',
+
+  'ui.onboarding.next': 'Weiter',
+  'ui.onboarding.iUnderstand': 'Verstanden',
+  'ui.onboarding.unitsTitle': 'Einheiten',
+  'ui.onboarding.unitsHint':
+    'Sie können dies jederzeit in den Einstellungen ändern',
+  'ui.onboarding.unitsMetric': 'Metrisch',
+  'ui.onboarding.unitsImperial': 'Imperial',
+  'ui.onboarding.disclaimerTitle': 'Bevor Sie beginnen',
 };

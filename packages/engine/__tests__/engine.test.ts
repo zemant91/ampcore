@@ -90,7 +90,8 @@ describe('BrandConfig: smoke test with the real electro brand', () => {
       ],
       defaultUnitsSystem: 'metric',
       disclosureLevel: 'technical',
-      legalDisclaimer: { en: 'Results are for reference only.', pl: 'Wyniki mają charakter poglądowy.' },
+      legalDisclaimerKey: 'legal.disclaimer',
+      onboarding: { welcomeTitleKey: 'onboarding.welcome.title', welcomeBodyKey: 'onboarding.welcome.body' },
       paywall: { valueProps: ['paywall.cableChain', 'paywall.pdfExport', 'paywall.unlimitedHistory'] },
     };
 

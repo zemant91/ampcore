@@ -194,4 +194,19 @@ export const it: Record<string, string> = {
   'ui.settings.title': 'Lingua',
   'ui.settings.systemDefault':
     'Rilevata dal dispositivo — modificabile in qualsiasi momento',
+
+  'legal.disclaimer':
+    'I risultati sono solo a titolo indicativo. La responsabilità progettuale spetta a un professionista qualificato. Verifica le norme in vigore nel tuo paese.',
+  'onboarding.welcome.title': 'Progettato per la IEC',
+  'onboarding.welcome.body':
+    "Ogni calcolatore segue la IEC 60364 e la prassi europea — non un'app NEC americana con la conversione delle unità aggiunta in un secondo momento.",
+
+  'ui.onboarding.next': 'Avanti',
+  'ui.onboarding.iUnderstand': 'Ho capito',
+  'ui.onboarding.unitsTitle': 'Unità',
+  'ui.onboarding.unitsHint':
+    'Puoi modificarlo in qualsiasi momento nelle Impostazioni',
+  'ui.onboarding.unitsMetric': 'Metrico',
+  'ui.onboarding.unitsImperial': 'Imperiale',
+  'ui.onboarding.disclaimerTitle': 'Prima di iniziare',
 };

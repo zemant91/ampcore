@@ -32,9 +32,10 @@ export const electro: BrandConfig = {
     ],
     defaultUnitsSystem: 'metric',
     disclosureLevel: 'technical',
-    legalDisclaimer: {
-        en: 'Results are for reference only. Design responsibility rests with a qualified professional. Verify against standards in force in your country.',
-        pl: 'Wyniki mają charakter poglądowy. Odpowiedzialność za rozwiązania projektowe ponosi wykwalifikowany specjalista.',
+    legalDisclaimerKey: 'legal.disclaimer',
+    onboarding: {
+        welcomeTitleKey: 'onboarding.welcome.title',
+        welcomeBodyKey: 'onboarding.welcome.body',
     },
     paywall: {
         valueProps: ['paywall.cableChain', 'paywall.pdfExport', 'paywall.unlimitedHistory'],

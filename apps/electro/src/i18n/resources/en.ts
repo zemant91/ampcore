@@ -223,4 +223,20 @@ export const en: Record<string, string> = {
 
   'ui.settings.title': 'Language',
   'ui.settings.systemDefault': 'Detected from device — change anytime',
+
+  // Onboarding — brand content (BrandConfig.legalDisclaimerKey / onboarding.*)
+  'legal.disclaimer':
+    'Results are for reference only. Design responsibility rests with a qualified professional. Verify against standards in force in your country.',
+  'onboarding.welcome.title': 'Built for IEC',
+  'onboarding.welcome.body':
+    'Every calculator follows IEC 60364 and European practice — not a US NEC app with unit conversion bolted on.',
+
+  // Onboarding — app chrome (slide 2/3 UI, not brand-specific)
+  'ui.onboarding.next': 'Next',
+  'ui.onboarding.iUnderstand': 'I understand',
+  'ui.onboarding.unitsTitle': 'Units',
+  'ui.onboarding.unitsHint': 'You can change this anytime in Settings',
+  'ui.onboarding.unitsMetric': 'Metric',
+  'ui.onboarding.unitsImperial': 'Imperial',
+  'ui.onboarding.disclaimerTitle': 'Before you start',
 };

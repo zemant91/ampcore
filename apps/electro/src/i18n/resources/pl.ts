@@ -191,4 +191,18 @@ export const pl: Record<string, string> = {
 
   'ui.settings.title': 'Język',
   'ui.settings.systemDefault': 'Wykryto z urządzenia — zmień w każdej chwili',
+
+  'legal.disclaimer':
+    'Wyniki mają charakter poglądowy. Odpowiedzialność za rozwiązania projektowe ponosi wykwalifikowany specjalista. Sprawdź zgodność z normami obowiązującymi w Twoim kraju.',
+  'onboarding.welcome.title': 'Stworzone dla IEC',
+  'onboarding.welcome.body':
+    'Każdy kalkulator opiera się na IEC 60364 i europejskiej praktyce — to nie jest amerykańska aplikacja NEC z doczepioną konwersją jednostek.',
+
+  'ui.onboarding.next': 'Dalej',
+  'ui.onboarding.iUnderstand': 'Rozumiem',
+  'ui.onboarding.unitsTitle': 'Jednostki',
+  'ui.onboarding.unitsHint': 'Możesz to zmienić w każdej chwili w Ustawieniach',
+  'ui.onboarding.unitsMetric': 'Metryczne',
+  'ui.onboarding.unitsImperial': 'Imperialne',
+  'ui.onboarding.disclaimerTitle': 'Zanim zaczniesz',
 };

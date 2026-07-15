@@ -46,8 +46,19 @@ export interface BrandConfig {
   upcoming?: UpcomingCalculator[];
   defaultUnitsSystem: UnitsSystem;
   disclosureLevel: DisclosureLevel;
-  /** Key — locale ('en' | 'pl' | 'de' ...), value — legal text for that locale and this brand */
-  legalDisclaimer: Record<string, string>;
+  /**
+   * legalDisclaimerKey replaces the old legalDisclaimer: Record<Locale,string>
+   * field. That was out of sync with the rest of the schema: everywhere
+   * else — an i18n key (titleKey, labelKey...), here it was raw text sitting
+   * directly in BrandConfig. Now it's a key; the actual text lives in the
+   * i18next resource files (en.ts/pl.ts/de.ts/...).
+   */
+  legalDisclaimerKey: string;
+  /** Content for onboarding — only what's actually brand-specific (slide 1) */
+  onboarding: {
+    welcomeTitleKey: string;
+    welcomeBodyKey: string;
+  };
   paywall: {
     /** i18n keys for paywall bullets — brand-specific, while the products (pro_monthly/pro_lifetime) are shared */
     valueProps: string[];
