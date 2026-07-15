@@ -81,7 +81,7 @@ describe('BrandConfig: smoke test with the real electro brand', () => {
   test('assembles from the already-written ohms_law with no type or runtime errors', () => {
     const electro: BrandConfig = {
       id: 'electro',
-      displayName: 'ElectroCalc EU',
+      displayName: 'AmpCore',
       theme: { accent: '#F5A623' },
       calculators: [ohmsLaw], // direct import, not a barrel re-export of the domain
       upcoming: [

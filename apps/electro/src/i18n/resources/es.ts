@@ -180,7 +180,7 @@ export const es: Record<string, string> = {
   'ui.menu.restorePurchases': 'Restaurar compras',
   'ui.menu.settingsRow': 'Idioma',
 
-  'ui.paywall.title': 'ElectroCalc Pro',
+  'ui.paywall.title': 'AmpCore Pro',
   'ui.paywall.unlockHeadline': 'Desbloquea todas las calculadoras',
   'ui.paywall.proCalculatorsSummary':
     '{{count}} calculadoras pro e historial ilimitado',

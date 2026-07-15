@@ -1,7 +1,7 @@
 # calc-suite — shared foundation (shared packages)
 
 This is **not the whole project**, just `packages/*` — the parts reused
-across all future apps (ElectroCalc EU, PlumbCalc EU, SolarCalc).
+across all future apps (AmpCore, PlumbCalc EU, SolarCalc).
 Specific apps (`apps/electro` etc.) are deliberately not included here —
 that's the next step, done on top of this foundation separately for each
 app. For a detailed breakdown of what's inside and why, see `calc-suite-structure.md`.

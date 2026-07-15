@@ -2,7 +2,7 @@
   "name": "@calc/calculators-electrical",
   "version": "0.0.1",
   "private": true,
-  "description": "Calculator configs for the \"electrical\" domain (IEC/EU) — ElectroCalc EU",
+  "description": "Calculator configs for the \"electrical\" domain (IEC/EU) — AmpCore",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

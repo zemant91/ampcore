@@ -13,7 +13,7 @@ import {
 
 export const electro: BrandConfig = {
     id: 'electro',
-    displayName: 'ElectroCalc EU',
+    displayName: 'AmpCore',
     theme: { accent: '#FFBB00' },
     calculators: [
         ohmsLaw,

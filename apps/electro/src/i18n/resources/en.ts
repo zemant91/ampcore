@@ -209,7 +209,7 @@ export const en: Record<string, string> = {
   'ui.menu.settingsRow': 'Language',
 
   // App chrome: Paywall
-  'ui.paywall.title': 'ElectroCalc Pro',
+  'ui.paywall.title': 'AmpCore Pro',
   'ui.paywall.unlockHeadline': 'Unlock every calculator',
   'ui.paywall.proCalculatorsSummary':
     '{{count}} pro calculators and unlimited history',
