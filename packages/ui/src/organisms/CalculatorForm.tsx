@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
-import { resolveFieldLabel, toBase } from '@calc/engine';
-import type { CalculatorDef, FieldDef, Values } from '@calc/engine';
+import { resolveFieldLabel, toBase, unitForField } from '@calc/engine';
+import type { CalculatorDef, FieldDef, UnitsSystem, Values } from '@calc/engine';
 import { View, Text } from 'react-native';
 import { FieldCard } from '../atoms/FieldCard';
 import { Chip } from '../atoms/Chip';
@@ -18,6 +18,8 @@ export interface CalculatorFormProps {
   resolveLabel: (labelKey: string) => string;
   /** ',' for locales that write decimals as "2,5" instead of "2.5" — see parseFieldText. Defaults to '.' */
   decimalSeparator?: ',' | '.';
+  /** Which unit each field parses/displays in (see unitForField) — defaults to 'metric' */
+  unitsSystem?: UnitsSystem;
   /** fieldId, the new value in base units (undefined — field cleared/invalid) */
   onChangeValue: (fieldId: string, value: string | number | undefined) => void;
 }
@@ -29,12 +31,18 @@ export interface CalculatorFormProps {
  * needed. String options (system/material/...) can't go through toBase in
  * the first place (they're not numbers).
  */
-export function parseFieldText(field: FieldDef, text: string, decimalSeparator: ',' | '.' = '.'): number | undefined {
+export function parseFieldText(
+  field: FieldDef,
+  text: string,
+  decimalSeparator: ',' | '.' = '.',
+  unitsSystem: UnitsSystem = 'metric',
+): number | undefined {
   if (text.trim() === '') return undefined;
   const normalized = decimalSeparator === ',' ? text.replace(',', '.') : text;
   const parsed = Number(normalized);
   if (Number.isNaN(parsed)) return undefined;
-  return field.defaultUnit ? toBase(field.quantity, parsed, field.defaultUnit) : parsed;
+  if (!field.defaultUnit) return parsed;
+  return toBase(field.quantity, parsed, unitForField(field.quantity, field.defaultUnit, unitsSystem));
 }
 
 /**
@@ -83,6 +91,7 @@ export function CalculatorForm({
   theme,
   resolveLabel,
   decimalSeparator = '.',
+  unitsSystem = 'metric',
   onChangeValue,
 }: CalculatorFormProps): ReactElement {
   const states = buildFieldCardStates(calculator.fields, values, outputs);
@@ -141,9 +150,10 @@ export function CalculatorForm({
           state={states[field.id]!}
           theme={theme}
           resolveLabel={resolveLabel}
+          unitsSystem={unitsSystem}
           onChangeText={
             field.options === undefined && field.role === 'input'
-              ? (text) => onChangeValue(field.id, parseFieldText(field, text, decimalSeparator))
+              ? (text) => onChangeValue(field.id, parseFieldText(field, text, decimalSeparator, unitsSystem))
               : undefined
           }
           onChangeOption={

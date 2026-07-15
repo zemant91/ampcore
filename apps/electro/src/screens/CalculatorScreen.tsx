@@ -9,6 +9,7 @@ import type { Values } from '@calc/engine';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
 import { decimalSeparatorFor } from '../i18n/i18n';
+import { getUnitsSystem } from '../lib/settings';
 import { useCalculatorState } from '../state/useCalculatorState';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calculator'>;
@@ -58,6 +59,7 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
         theme={theme}
         resolveLabel={t}
         decimalSeparator={decimalSeparatorFor(i18n.language)}
+        unitsSystem={getUnitsSystem(electro.defaultUnitsSystem)}
         onChangeValue={onChangeValue}
         onBack={() => navigation.goBack()}
         onOpenHistory={() => navigation.navigate('History')}

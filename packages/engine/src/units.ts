@@ -1,4 +1,5 @@
 import type { Quantity } from './types';
+import type { UnitsSystem } from './brand';
 
 export interface UnitDef {
   id: string;
@@ -14,6 +15,15 @@ const linear = (id: string, factor: number): UnitDef => ({ id, factor });
  * Minimal unit set for the MVP (ohms_law + a base for future calculators).
  * Non-linear quantities (e.g. AWG <-> mm², master plan section 6 "awg-table, v2")
  * are added via toBase/fromBase — the interface already supports it.
+ *
+ * 'kcmil' (thousand circular mils, base: mm²) and 'F' (Fahrenheit, base: °C)
+ * are the imperial units used by IMPERIAL_UNIT below. kcmil, not AWG: AWG is
+ * a discrete gauge table (14, 12, 10, 8, 6, 4, 2, 1, 1/0, 2/0...), not a
+ * continuous unit — it doesn't fit this toBase/fromBase model without a
+ * separate lookup table, which is out of scope here. kcmil IS a genuine,
+ * professionally-used linear cross-section unit (large NEC conductors are
+ * bought and specified in kcmil directly), so it's a correct imperial
+ * cross-section unit on its own, not a stand-in for AWG.
  */
 export const UNITS: Partial<Record<Quantity, UnitDef[]>> = {
   voltage: [linear('V', 1), linear('kV', 1000)],
@@ -21,11 +31,41 @@ export const UNITS: Partial<Record<Quantity, UnitDef[]>> = {
   resistance: [linear('ohm', 1), linear('kohm', 1000)],
   power: [linear('W', 1), linear('kW', 1000)],
   length: [linear('m', 1), linear('ft', 0.3048), linear('mm', 0.001)],
-  area: [linear('mm2', 1)],
-  temperature: [linear('C', 1)],
+  area: [linear('mm2', 1), linear('kcmil', 0.5067)],
+  temperature: [
+    linear('C', 1),
+    { id: 'F', toBase: (f) => ((f - 32) * 5) / 9, fromBase: (c) => (c * 9) / 5 + 32 },
+  ],
   time: [linear('s', 1)],
   dimensionless: [linear('unit', 1)],
 };
+
+/**
+ * Per-quantity imperial unit, for the quantities where metric and imperial
+ * actually differ (length, area, temperature). voltage/current/resistance/
+ * power use the same SI units in both systems — there's no "imperial volt" —
+ * so they're absent here on purpose: unitForField falls through to the
+ * field's own defaultUnit for anything not listed.
+ */
+export const IMPERIAL_UNIT: Partial<Record<Quantity, string>> = {
+  length: 'ft',
+  area: 'kcmil',
+  temperature: 'F',
+};
+
+/**
+ * The unit a field should actually render in, given the app's active units
+ * system — defaultUnit unchanged for 'metric' or for quantities with no
+ * imperial variant, IMPERIAL_UNIT's entry otherwise. The single place both
+ * CalculatorForm (parsing) and FieldCard (display) resolve this, so the two
+ * can never disagree about which unit is in effect for a given field.
+ */
+export function unitForField(quantity: Quantity, defaultUnit: string, unitsSystem: UnitsSystem): string {
+  if (unitsSystem === 'imperial') {
+    return IMPERIAL_UNIT[quantity] ?? defaultUnit;
+  }
+  return defaultUnit;
+}
 
 function findUnit(quantity: Quantity, unitId: string): UnitDef {
   const list = UNITS[quantity];

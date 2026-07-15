@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from 'react';
-import type { CalculatorDef, Values, WarningKey } from '@calc/engine';
+import type { CalculatorDef, UnitsSystem, Values, WarningKey } from '@calc/engine';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import type { ThemeTokens } from '../tokens/theme';
 import { CalculatorForm } from './CalculatorForm';
@@ -14,6 +14,8 @@ export interface CalculatorScreenTemplateProps {
   resolveLabel: (labelKey: string) => string;
   /** ',' for locales that write decimals as "2,5" (see CalculatorForm.parseFieldText); defaults to '.' */
   decimalSeparator?: ',' | '.';
+  /** Which unit each field parses/displays in (see @calc/engine's unitForField) — defaults to 'metric' */
+  unitsSystem?: UnitsSystem;
   onChangeValue: (fieldId: string, value: string | number | undefined) => void;
   onBack: () => void;
   onOpenHistory: () => void;
@@ -47,6 +49,7 @@ export function CalculatorScreenTemplate({
   theme,
   resolveLabel,
   decimalSeparator,
+  unitsSystem,
   onChangeValue,
   onBack,
   onOpenHistory,
@@ -110,6 +113,7 @@ export function CalculatorScreenTemplate({
           theme={theme}
           resolveLabel={resolveLabel}
           decimalSeparator={decimalSeparator}
+          unitsSystem={unitsSystem}
           onChangeValue={onChangeValue}
         />
 

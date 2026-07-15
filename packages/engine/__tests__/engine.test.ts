@@ -1,6 +1,7 @@
 import {
   toBase,
   fromBase,
+  unitForField,
   getDuplicateFieldIds,
   hasNoOutputFields,
   resolveFieldLabel,
@@ -21,6 +22,42 @@ describe('units: toBase / fromBase', () => {
 
   test('unknown unit throws a clear error', () => {
     expect(() => toBase('voltage', 1, 'lightyear')).toThrow(/Unknown unit/);
+  });
+
+  test('ft -> m (base unit) and back', () => {
+    expect(toBase('length', 10, 'ft')).toBeCloseTo(3.048, 6);
+    expect(fromBase('length', 3.048, 'ft')).toBeCloseTo(10, 6);
+  });
+
+  test('kcmil -> mm2 (base unit) and back', () => {
+    expect(toBase('area', 4, 'kcmil')).toBeCloseTo(2.0268, 4);
+    expect(fromBase('area', 2.0268, 'kcmil')).toBeCloseTo(4, 3);
+  });
+
+  test('F -> C (base unit) and back — non-linear (offset), not just a factor', () => {
+    expect(toBase('temperature', 32, 'F')).toBeCloseTo(0, 6);
+    expect(toBase('temperature', 212, 'F')).toBeCloseTo(100, 6);
+    expect(fromBase('temperature', 100, 'F')).toBeCloseTo(212, 6);
+  });
+});
+
+describe('unitForField: resolves the effective unit for the active units system', () => {
+  test('metric -> always the field default, regardless of quantity', () => {
+    expect(unitForField('length', 'm', 'metric')).toBe('m');
+    expect(unitForField('voltage', 'V', 'metric')).toBe('V');
+  });
+
+  test('imperial -> the IMPERIAL_UNIT entry for length/area/temperature', () => {
+    expect(unitForField('length', 'm', 'imperial')).toBe('ft');
+    expect(unitForField('area', 'mm2', 'imperial')).toBe('kcmil');
+    expect(unitForField('temperature', 'C', 'imperial')).toBe('F');
+  });
+
+  test('imperial -> falls through to defaultUnit for quantities with no imperial variant (V/A/ohm/W)', () => {
+    expect(unitForField('voltage', 'V', 'imperial')).toBe('V');
+    expect(unitForField('current', 'A', 'imperial')).toBe('A');
+    expect(unitForField('resistance', 'ohm', 'imperial')).toBe('ohm');
+    expect(unitForField('power', 'kW', 'imperial')).toBe('kW');
   });
 });
 

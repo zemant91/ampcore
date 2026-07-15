@@ -10,7 +10,7 @@ export type {
   CalculatorDef,
 } from './types';
 
-export { UNITS, toBase, fromBase } from './units';
+export { UNITS, IMPERIAL_UNIT, toBase, fromBase, unitForField } from './units';
 export type { UnitDef } from './units';
 
 export { getDuplicateFieldIds, hasNoOutputFields } from './validate';

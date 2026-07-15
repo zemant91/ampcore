@@ -17,6 +17,14 @@ const dimensionlessField: FieldDef = {
   defaultUnit: 'unit',
 };
 
+const lengthField: FieldDef = {
+  id: 'length',
+  labelKey: 'field.length',
+  quantity: 'length',
+  role: 'input',
+  defaultUnit: 'm',
+};
+
 describe('parseFieldText: field text -> number in base units', () => {
   test('"1.5" with defaultUnit=kW -> 1500 (base: W)', () => {
     expect(parseFieldText(powerField, '1.5')).toBe(1500);
@@ -57,6 +65,21 @@ describe('parseFieldText: locale-aware decimal separator (PL/DE/FR/IT/ES write "
   test('decimalSeparator="," with empty/whitespace text -> undefined (field cleared)', () => {
     expect(parseFieldText(dimensionlessField, '', ',')).toBeUndefined();
     expect(parseFieldText(dimensionlessField, '   ', ',')).toBeUndefined();
+  });
+});
+
+describe('parseFieldText: unitsSystem picks which unit the text is parsed in', () => {
+  test('unitsSystem="metric" (or omitted) -> field.defaultUnit (m), unchanged behavior', () => {
+    expect(parseFieldText(lengthField, '10')).toBe(10);
+    expect(parseFieldText(lengthField, '10', '.', 'metric')).toBe(10);
+  });
+
+  test('unitsSystem="imperial" -> length parses as feet, converted to meters (base)', () => {
+    expect(parseFieldText(lengthField, '10', '.', 'imperial')).toBeCloseTo(3.048, 6);
+  });
+
+  test('unitsSystem="imperial" has no effect on a quantity with no imperial variant (power)', () => {
+    expect(parseFieldText(powerField, '1.5', '.', 'imperial')).toBe(1500);
   });
 });
 

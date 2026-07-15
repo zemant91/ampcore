@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
-import { resolveFieldLabel, resolveFieldSymbol, toBase, fromBase } from '@calc/engine';
-import type { FieldDef, Values } from '@calc/engine';
+import { resolveFieldLabel, resolveFieldSymbol, fromBase, unitForField } from '@calc/engine';
+import type { FieldDef, UnitsSystem, Values } from '@calc/engine';
 import { View, Text, TextInput } from 'react-native';
 import type { ViewStyle } from 'react-native';
 import type { ThemeTokens } from '../tokens/theme';
@@ -14,6 +14,8 @@ export interface FieldCardProps {
   theme: ThemeTokens;
   /** labelKey -> text. The atom doesn't know about i18n, it's given the resolver from outside */
   resolveLabel: (labelKey: string) => string;
+  /** Which unit this field displays in (see unitForField) — defaults to 'metric' */
+  unitsSystem?: UnitsSystem;
   /** Set -> the field is editable (only for role='input', no options, and state != 'calculated') */
   onChangeText?: (text: string) => void;
   /** Set -> the field has `options` and renders a SegmentedControl in the value slot instead of text */
@@ -43,6 +45,7 @@ export function FieldCard({
   state,
   theme,
   resolveLabel,
+  unitsSystem = 'metric',
   onChangeText,
   onChangeOption,
 }: FieldCardProps): ReactElement {
@@ -50,12 +53,15 @@ export function FieldCard({
   const symbol = resolveFieldSymbol(field, values);
   const rawValue = values[field.id];
   const hasOptions = field.options !== undefined;
+  // The unit this field actually parses/displays in — same resolution
+  // CalculatorForm.parseFieldText uses, so the two can't disagree.
+  const unit = field.defaultUnit ? unitForField(field.quantity, field.defaultUnit, unitsSystem) : undefined;
 
   const displayValue =
     state === 'empty' || rawValue === undefined
       ? '—'
-      : field.defaultUnit && typeof rawValue === 'number'
-        ? fromBase(field.quantity, rawValue, field.defaultUnit)
+      : unit && typeof rawValue === 'number'
+        ? fromBase(field.quantity, rawValue, unit)
         : rawValue;
 
   const editable = !hasOptions && field.role === 'input' && state !== 'calculated' && onChangeText !== undefined;
@@ -154,9 +160,9 @@ export function FieldCard({
             {String(displayValue)}
           </Text>
         )}
-        {!hasOptions && state !== 'empty' && field.defaultUnit && (
+        {!hasOptions && state !== 'empty' && unit && (
           <Text style={{ fontFamily: theme.typography.uiFontFamily, fontSize: 13, fontWeight: '700', color: theme.accent }}>
-            {field.defaultUnit}
+            {unit}
           </Text>
         )}
       </View>
