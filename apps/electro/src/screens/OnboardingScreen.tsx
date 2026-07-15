@@ -23,7 +23,7 @@ interface Props {
  * Three slides, plain sequential navigation via a bottom button — not a
  * swipe pager. The third slide (legal disclaimer) needs a deliberate
  * confirming tap, not something a user can flick past by accident. This is
- * a single component with internal step state, not three stack screens on
+ * a single component with an internal step state, not three stack screens on
  * purpose: nothing pushed onto the navigator means there's no back-swipe
  * gesture or screen to dismiss out from under it (see App.tsx — this
  * replaces RootNavigator entirely until onComplete fires).
@@ -104,13 +104,15 @@ export function OnboardingScreen({ onComplete }: Props): ReactElement {
             >
               {t('ui.onboarding.unitsTitle')}
             </Text>
-            <SegmentedControl
-              options={UNITS_OPTIONS}
-              value={unitsSystem}
-              theme={theme}
-              resolveLabel={t}
-              onChange={(value) => setUnitsSystem(value as UnitsSystem)}
-            />
+            <View style={{ flexDirection: 'row' }}>
+              <SegmentedControl
+                options={UNITS_OPTIONS}
+                value={unitsSystem}
+                theme={theme}
+                resolveLabel={t}
+                onChange={(value) => setUnitsSystem(value as UnitsSystem)}
+              />
+            </View>
             <Text
               style={{
                 fontFamily: theme.typography.uiFontFamily,
