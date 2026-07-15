@@ -238,5 +238,9 @@ export const en: Record<string, string> = {
   'ui.onboarding.unitsHint': 'You can change this anytime in Settings',
   'ui.onboarding.unitsMetric': 'Metric',
   'ui.onboarding.unitsImperial': 'Imperial',
+  'ui.settings.unitsMetricHint':
+    'Length in meters, cross-section in mm², temperature in °C',
+  'ui.settings.unitsImperialHint':
+    'Length in feet, cross-section in kcmil, temperature in °F',
   'ui.onboarding.disclaimerTitle': 'Before you start',
 };

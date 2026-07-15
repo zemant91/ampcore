@@ -207,5 +207,9 @@ export const es: Record<string, string> = {
   'ui.onboarding.unitsHint': 'Puedes cambiarlo en cualquier momento en Ajustes',
   'ui.onboarding.unitsMetric': 'Métrico',
   'ui.onboarding.unitsImperial': 'Imperial',
+  'ui.settings.unitsMetricHint':
+    'Longitud en metros, sección en mm², temperatura en °C',
+  'ui.settings.unitsImperialHint':
+    'Longitud en pies, sección en kcmil, temperatura en °F',
   'ui.onboarding.disclaimerTitle': 'Antes de empezar',
 };

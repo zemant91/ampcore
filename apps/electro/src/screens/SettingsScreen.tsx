@@ -146,23 +146,34 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
           return (
             <Pressable
               key={system}
-              style={rowStyle}
+              style={{ ...rowStyle, paddingVertical: theme.layout.spacingUnit * 1.5 }}
               onPress={() => {
                 setUnitsSystem(system);
                 setUnitsSystemState(system);
               }}
               testID={`settings-units-${system}`}
             >
-              <Text
-                style={{
-                  fontFamily: theme.typography.uiFontFamily,
-                  fontSize: 15,
-                  color: active ? theme.colors.textPrimary : theme.colors.textSecondary,
-                  fontWeight: active ? '700' : '400',
-                }}
-              >
-                {system === 'metric' ? t('ui.onboarding.unitsMetric') : t('ui.onboarding.unitsImperial')}
-              </Text>
+              <View style={{ flex: 1, gap: 2 }}>
+                <Text
+                  style={{
+                    fontFamily: theme.typography.uiFontFamily,
+                    fontSize: 15,
+                    color: active ? theme.colors.textPrimary : theme.colors.textSecondary,
+                    fontWeight: active ? '700' : '400',
+                  }}
+                >
+                  {system === 'metric' ? t('ui.onboarding.unitsMetric') : t('ui.onboarding.unitsImperial')}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: theme.typography.uiFontFamily,
+                    fontSize: 12,
+                    color: theme.colors.textSecondary,
+                  }}
+                >
+                  {system === 'metric' ? t('ui.settings.unitsMetricHint') : t('ui.settings.unitsImperialHint')}
+                </Text>
+              </View>
               {active && <Check size={18} color={theme.accent} />}
             </Pressable>
           );

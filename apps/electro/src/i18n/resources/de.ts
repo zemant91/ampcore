@@ -208,5 +208,9 @@ export const de: Record<string, string> = {
     'Sie können dies jederzeit in den Einstellungen ändern',
   'ui.onboarding.unitsMetric': 'Metrisch',
   'ui.onboarding.unitsImperial': 'Imperial',
+  'ui.settings.unitsMetricHint':
+    'Länge in Metern, Querschnitt in mm², Temperatur in °C',
+  'ui.settings.unitsImperialHint':
+    'Länge in Fuß, Querschnitt in kcmil, Temperatur in °F',
   'ui.onboarding.disclaimerTitle': 'Bevor Sie beginnen',
 };

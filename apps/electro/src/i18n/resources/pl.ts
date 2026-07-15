@@ -204,5 +204,9 @@ export const pl: Record<string, string> = {
   'ui.onboarding.unitsHint': 'Możesz to zmienić w każdej chwili w Ustawieniach',
   'ui.onboarding.unitsMetric': 'Metryczne',
   'ui.onboarding.unitsImperial': 'Imperialne',
+  'ui.settings.unitsMetricHint':
+    'Długość w metrach, przekrój w mm², temperatura w °C',
+  'ui.settings.unitsImperialHint':
+    'Długość w stopach, przekrój w kcmil, temperatura w °F',
   'ui.onboarding.disclaimerTitle': 'Zanim zaczniesz',
 };
