@@ -18,9 +18,9 @@ const theme = buildTheme(electro.theme.accent);
  */
 const illustrationBoxStyle = {
   alignSelf: 'center' as const,
-  width: 96,
-  height: 96,
-  borderRadius: 48,
+  width: 192,
+  height: 192,
+  borderRadius: 96,
   alignItems: 'center' as const,
   justifyContent: 'center' as const,
   backgroundColor: `${theme.accent}20`,
@@ -97,7 +97,7 @@ export function OnboardingScreen({ onComplete }: Props): ReactElement {
             testID="onboarding-slide-welcome"
           >
             <View style={illustrationBoxStyle}>
-              <Zap size={44} color={theme.accent} />
+              <Zap size={88} color={theme.accent} />
             </View>
             <Text
               style={{
@@ -128,7 +128,7 @@ export function OnboardingScreen({ onComplete }: Props): ReactElement {
             testID="onboarding-slide-disclaimer"
           >
             <View style={illustrationBoxStyle}>
-              <ShieldAlert size={44} color={theme.accent} />
+              <ShieldAlert size={88} color={theme.accent} />
             </View>
             <Text
               style={{
