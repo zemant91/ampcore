@@ -2,6 +2,10 @@ import {
   toBase,
   fromBase,
   unitForField,
+  displayUnit,
+  METRIC_UNIT,
+  IMPERIAL_UNIT,
+  DIFFERING_QUANTITIES,
   getDuplicateFieldIds,
   hasNoOutputFields,
   resolveFieldLabel,
@@ -58,6 +62,41 @@ describe('unitForField: resolves the effective unit for the active units system'
     expect(unitForField('current', 'A', 'imperial')).toBe('A');
     expect(unitForField('resistance', 'ohm', 'imperial')).toBe('ohm');
     expect(unitForField('power', 'kW', 'imperial')).toBe('kW');
+  });
+});
+
+describe('DIFFERING_QUANTITIES / METRIC_UNIT: the data UI reads to describe both systems, instead of hand-written prose', () => {
+  test('DIFFERING_QUANTITIES is derived from IMPERIAL_UNIT, not a separately hand-kept list', () => {
+    expect(DIFFERING_QUANTITIES.sort()).toEqual(['area', 'length', 'temperature']);
+  });
+
+  test('METRIC_UNIT has one entry per DIFFERING_QUANTITIES entry', () => {
+    for (const quantity of DIFFERING_QUANTITIES) {
+      expect(METRIC_UNIT[quantity]).toBeDefined();
+      expect(IMPERIAL_UNIT[quantity]).toBeDefined();
+    }
+  });
+
+  test('unitForField driven off METRIC_UNIT matches the hardcoded expectations above', () => {
+    for (const quantity of DIFFERING_QUANTITIES) {
+      expect(unitForField(quantity, METRIC_UNIT[quantity]!, 'metric')).toBe(METRIC_UNIT[quantity]);
+      expect(unitForField(quantity, METRIC_UNIT[quantity]!, 'imperial')).toBe(IMPERIAL_UNIT[quantity]);
+    }
+  });
+});
+
+describe('displayUnit: typeset form of a unit id', () => {
+  test('mm2 -> mm², C -> °C, F -> °F', () => {
+    expect(displayUnit('mm2')).toBe('mm²');
+    expect(displayUnit('C')).toBe('°C');
+    expect(displayUnit('F')).toBe('°F');
+  });
+
+  test('units with no special display form pass through as-is', () => {
+    expect(displayUnit('m')).toBe('m');
+    expect(displayUnit('ft')).toBe('ft');
+    expect(displayUnit('kcmil')).toBe('kcmil');
+    expect(displayUnit('kW')).toBe('kW');
   });
 });
 

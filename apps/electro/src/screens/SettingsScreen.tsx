@@ -6,7 +6,8 @@ import { Check } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
-import type { UnitsSystem } from '@calc/engine';
+import { DIFFERING_QUANTITIES, METRIC_UNIT, unitForField, displayUnit } from '@calc/engine';
+import type { Quantity, UnitsSystem } from '@calc/engine';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
 import { SUPPORTED_LANGUAGES, setLanguage } from '../i18n/i18n';
@@ -14,6 +15,28 @@ import type { SupportedLanguage } from '../i18n/i18n';
 import { getUnitsSystem, setUnitsSystem } from '../lib/settings';
 
 const UNITS_SYSTEMS: UnitsSystem[] = ['metric', 'imperial'];
+
+/** Which i18n key names each of DIFFERING_QUANTITIES for the units-system hint below */
+const QUANTITY_LABEL_KEY: Partial<Record<Quantity, string>> = {
+  length: 'field.length',
+  area: 'field.crossSection',
+  temperature: 'field.temperature',
+};
+
+/**
+ * "Length: m", "Cross-section: mm²", ... — built from the same data
+ * unitForField uses for real fields (DIFFERING_QUANTITIES/METRIC_UNIT), not
+ * hand-written prose per locale — a changed/added unit here updates
+ * automatically instead of needing a matching edit in all 6 resource files.
+ * Only the quantity names go through i18n; unit symbols (m, ft, mm²...)
+ * aren't translated anywhere else in the app either.
+ */
+function unitsSummary(system: UnitsSystem, t: (key: string) => string): string {
+  return DIFFERING_QUANTITIES.map((quantity) => {
+    const unit = unitForField(quantity, METRIC_UNIT[quantity]!, system);
+    return `${t(QUANTITY_LABEL_KEY[quantity]!)}: ${displayUnit(unit)}`;
+  }).join(' · ');
+}
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 
@@ -171,7 +194,7 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
                     color: theme.colors.textSecondary,
                   }}
                 >
-                  {system === 'metric' ? t('ui.settings.unitsMetricHint') : t('ui.settings.unitsImperialHint')}
+                  {unitsSummary(system, t)}
                 </Text>
               </View>
               {active && <Check size={18} color={theme.accent} />}
