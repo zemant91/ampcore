@@ -203,7 +203,6 @@ export const pl: Record<string, string> = {
   'ui.onboarding.next': 'Dalej',
   'ui.onboarding.iUnderstand': 'Rozumiem',
   'ui.onboarding.unitsTitle': 'Jednostki',
-  'ui.onboarding.unitsHint': 'Możesz to zmienić w każdej chwili w Ustawieniach',
   'ui.onboarding.unitsMetric': 'Metryczne',
   'ui.onboarding.unitsImperial': 'Imperialne',
   'ui.onboarding.disclaimerTitle': 'Zanim zaczniesz',

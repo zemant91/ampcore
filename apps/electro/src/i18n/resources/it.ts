@@ -206,8 +206,6 @@ export const it: Record<string, string> = {
   'ui.onboarding.next': 'Avanti',
   'ui.onboarding.iUnderstand': 'Ho capito',
   'ui.onboarding.unitsTitle': 'Unità',
-  'ui.onboarding.unitsHint':
-    'Puoi modificarlo in qualsiasi momento nelle Impostazioni',
   'ui.onboarding.unitsMetric': 'Metrico',
   'ui.onboarding.unitsImperial': 'Imperiale',
   'ui.onboarding.disclaimerTitle': 'Prima di iniziare',

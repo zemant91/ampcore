@@ -207,8 +207,6 @@ export const fr: Record<string, string> = {
   'ui.onboarding.next': 'Suivant',
   'ui.onboarding.iUnderstand': "J'ai compris",
   'ui.onboarding.unitsTitle': 'Unités',
-  'ui.onboarding.unitsHint':
-    'Vous pouvez modifier ce choix à tout moment dans les paramètres',
   'ui.onboarding.unitsMetric': 'Métrique',
   'ui.onboarding.unitsImperial': 'Impérial',
   'ui.onboarding.disclaimerTitle': 'Avant de commencer',
