@@ -25,8 +25,8 @@
                         <constraints>
                             <constraint firstItem="HYI-VL-pso" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ktc-cx-01"/>
                             <constraint firstItem="HYI-VL-pso" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ktc-cy-01"/>
-                            <constraint firstItem="HYI-VL-pso" firstAttribute="width" constant="240" id="ktc-w-01"/>
                             <constraint firstItem="HYI-VL-pso" firstAttribute="height" constant="240" id="ktc-h-01"/>
+                            <constraint firstItem="HYI-VL-pso" firstAttribute="width" constant="240" id="ktc-w-01"/>
                         </constraints>
                     </view>
                 </viewController>

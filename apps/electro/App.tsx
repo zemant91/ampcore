@@ -8,6 +8,12 @@ import './src/i18n/i18n';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { isOnboardingCompleted } from './src/lib/settings';
+import { EntitlementProvider, initPurchases } from './src/subscriptions';
+
+// Configures the RevenueCat SDK once, before EntitlementProvider's first
+// Purchases.getCustomerInfo() call — module-level (not an effect) so it
+// runs exactly once per app process, same lifetime as the SDK itself.
+initPurchases();
 
 export default function App(): ReactElement {
   // Checked once at mount, before Home (or anything else) ever renders —
@@ -17,11 +23,13 @@ export default function App(): ReactElement {
 
   return (
     <SafeAreaProvider>
-      {onboardingDone ? (
-        <RootNavigator />
-      ) : (
-        <OnboardingScreen onComplete={() => setOnboardingDone(true)} />
-      )}
+      <EntitlementProvider>
+        {onboardingDone ? (
+          <RootNavigator />
+        ) : (
+          <OnboardingScreen onComplete={() => setOnboardingDone(true)} />
+        )}
+      </EntitlementProvider>
     </SafeAreaProvider>
   );
 }

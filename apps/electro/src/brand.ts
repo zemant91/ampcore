@@ -40,4 +40,6 @@ export const electro: BrandConfig = {
     paywall: {
         valueProps: ['paywall.cableChain', 'paywall.pdfExport', 'paywall.unlimitedHistory'],
     },
+    // TODO: no dedicated support mailbox exists yet — replace with a real one before release.
+    supportEmail: 'feedback@electrocalc.eu',
 };

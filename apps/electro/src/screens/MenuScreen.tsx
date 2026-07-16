@@ -1,12 +1,16 @@
 import type { ReactElement } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, Linking, Platform, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { History as HistoryIcon, FileText, Lock, Languages } from 'lucide-react-native';
+import { History as HistoryIcon, FileText, Lock, Languages, Mail } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
+import DeviceInfo from 'react-native-device-info';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
+import { buildFeedbackMailtoUrl } from '../feedback/buildFeedbackMailto';
+import { presentCustomerCenter } from '../subscriptions';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Menu'>;
 
@@ -81,6 +85,19 @@ function ComingSoonRow({ icon, label }: { icon: ReactElement; label: string }): 
  */
 export function MenuScreen({ navigation }: Props): ReactElement {
   const { t } = useTranslation();
+  const [opening, setOpening] = useState(false);
+
+  async function handleManageSubscription(): Promise<void> {
+    setOpening(true);
+    try {
+      await presentCustomerCenter();
+    } catch {
+      Alert.alert(t('ui.subscriptions.errorTitle'), t('ui.subscriptions.errorBody'));
+    } finally {
+      setOpening(false);
+    }
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top', 'left', 'right']}>
       <View
@@ -126,8 +143,38 @@ export function MenuScreen({ navigation }: Props): ReactElement {
           </Text>
         </Pressable>
 
+        <Pressable
+          style={rowStyle}
+          onPress={() =>
+            Linking.openURL(
+              buildFeedbackMailtoUrl({
+                supportEmail: electro.supportEmail,
+                appVersion: DeviceInfo.getVersion(),
+                os: Platform.OS,
+                osVersion: String(Platform.Version),
+              }),
+            )
+          }
+          testID="menu-feedback"
+        >
+          <View style={rowIconBoxStyle}>
+            <Mail size={18} color={theme.accent} />
+          </View>
+          <Text style={{ flex: 1, fontFamily: theme.typography.uiFontFamily, fontSize: 15, color: theme.colors.textPrimary }}>
+            {t('ui.menu.feedback')}
+          </Text>
+        </Pressable>
+
         <ComingSoonRow icon={<FileText size={18} color={theme.colors.textSecondary} />} label={t('ui.menu.exportPdf')} />
-        <ComingSoonRow icon={<Lock size={18} color={theme.colors.textSecondary} />} label={t('ui.menu.restorePurchases')} />
+
+        <Pressable style={rowStyle} onPress={handleManageSubscription} disabled={opening} testID="menu-manage-subscription">
+          <View style={rowIconBoxStyle}>
+            <Lock size={18} color={theme.accent} />
+          </View>
+          <Text style={{ flex: 1, fontFamily: theme.typography.uiFontFamily, fontSize: 15, color: theme.colors.textPrimary }}>
+            {t('ui.menu.manageSubscription')}
+          </Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

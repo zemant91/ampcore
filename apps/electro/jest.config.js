@@ -22,5 +22,6 @@ module.exports = {
   moduleNameMapper: {
     '\\.svg$': '<rootDir>/__mocks__/svgMock.js',
     '^react-native-localize$': 'react-native-localize/mock/jest',
+    '^react-native-device-info$': 'react-native-device-info/jest/react-native-device-info-mock.js',
   },
 };

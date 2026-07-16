@@ -41,6 +41,10 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# react-native-config — real secrets live only in .env, never commit it
+.env
+.env.*.local
+
 # fastlane
 #
 # It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the

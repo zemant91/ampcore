@@ -176,17 +176,17 @@ export const pl: Record<string, string> = {
 
   'ui.menu.title': 'Więcej',
   'ui.menu.exportPdf': 'Eksport do PDF',
-  'ui.menu.restorePurchases': 'Przywróć zakupy',
+  'ui.menu.manageSubscription': 'Zarządzaj subskrypcją',
   'ui.menu.settingsRow': 'Ustawienia',
+  'ui.menu.feedback': 'Wyślij opinię',
+  'ui.calculator.reportIssue': 'Zgłoś problem',
 
-  'ui.paywall.title': 'AmpCore Pro',
-  'ui.paywall.unlockHeadline': 'Odblokuj wszystkie kalkulatory',
-  'ui.paywall.proCalculatorsSummary':
-    '{{count}} kalkulatorów pro i nieograniczona historia',
-  'ui.paywall.includesTitle': 'Zawiera',
-  'ui.paywall.ctaPlaceholder': 'Ulepsz — wkrótce',
-  'ui.paywall.noPaymentNotice':
-    'Brak integracji płatności — nie ma tu nic do kupienia.',
+  'ui.paywall.alreadyProTitle': 'Masz Pro',
+  'ui.paywall.alreadyProBody': 'Wszystkie kalkulatory są odblokowane. Dziękujemy za subskrypcję!',
+  'ui.paywall.close': 'Zamknij',
+
+  'ui.subscriptions.errorTitle': 'Coś poszło nie tak',
+  'ui.subscriptions.errorBody': 'Spróbuj ponownie.',
 
   'ui.common.soonBadge': 'WKRÓTCE',
 

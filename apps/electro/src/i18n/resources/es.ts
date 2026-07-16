@@ -178,17 +178,17 @@ export const es: Record<string, string> = {
 
   'ui.menu.title': 'Más',
   'ui.menu.exportPdf': 'Exportar a PDF',
-  'ui.menu.restorePurchases': 'Restaurar compras',
+  'ui.menu.manageSubscription': 'Gestionar suscripción',
   'ui.menu.settingsRow': 'Ajustes',
+  'ui.menu.feedback': 'Enviar comentarios',
+  'ui.calculator.reportIssue': 'Reportar un problema',
 
-  'ui.paywall.title': 'AmpCore Pro',
-  'ui.paywall.unlockHeadline': 'Desbloquea todas las calculadoras',
-  'ui.paywall.proCalculatorsSummary':
-    '{{count}} calculadoras pro e historial ilimitado',
-  'ui.paywall.includesTitle': 'Incluye',
-  'ui.paywall.ctaPlaceholder': 'Mejorar — próximamente',
-  'ui.paywall.noPaymentNotice':
-    'Aún no hay integración de pago — no hay nada que comprar aquí.',
+  'ui.paywall.alreadyProTitle': 'Ya tienes Pro',
+  'ui.paywall.alreadyProBody': '¡Todas las calculadoras están desbloqueadas. Gracias por suscribirte!',
+  'ui.paywall.close': 'Cerrar',
+
+  'ui.subscriptions.errorTitle': 'Algo salió mal',
+  'ui.subscriptions.errorBody': 'Inténtalo de nuevo.',
 
   'ui.common.soonBadge': 'PRÓXIMAMENTE',
 

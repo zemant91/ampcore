@@ -10,6 +10,7 @@ import type { CalculatorDef } from '@calc/engine';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
 import { HOME_ICONS } from '../icons';
+import { useEntitlement } from '../subscriptions';
 
 /** Not a real category — marks the flat search-results list so renderItem skips the category caption */
 const SEARCH_RESULTS = '__search_results__';
@@ -46,14 +47,7 @@ const cardStyle = {
   backgroundColor: theme.colors.cardSurface,
 };
 
-/**
- * Pro-tier calculators are fully built, but the paywall has no real payment
- * integration behind it yet (see PaywallScreen) — so right now "pro" would
- * actually mean "free for anyone who taps in," not a real gate. Until real
- * payment exists, these render locked/non-interactive with a SOON badge —
- * same visual language as MenuScreen's ComingSoonRow — instead of silently
- * giving away calculators the brand intends to sell.
- */
+/** Pro-tier calculators the user hasn't unlocked render locked/non-interactive, same visual language as MenuScreen's ComingSoonRow. */
 const lockedCardStyle = {
   ...cardStyle,
   backgroundColor: 'transparent',
@@ -99,6 +93,7 @@ function CalculatorIcon({ iconId, muted }: { iconId: string; muted?: boolean }):
  */
 export function HomeScreen({ navigation }: Props): ReactElement {
   const { t } = useTranslation();
+  const { isPro } = useEntitlement();
   const [query, setQuery] = useState('');
   const sections = useMemo(() => groupByCategory(electro.calculators), []);
 
@@ -234,7 +229,7 @@ export function HomeScreen({ navigation }: Props): ReactElement {
             )}
             <View style={{ gap: theme.layout.spacingUnit }}>
               {section.items.map((calc) => {
-                const locked = calc.tier === 'pro';
+                const locked = calc.tier === 'pro' && !isPro;
                 return (
                   <Pressable
                     key={calc.id}

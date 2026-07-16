@@ -1,8 +1,10 @@
 import type { ReactElement } from 'react';
 import { useCallback } from 'react';
+import { Linking, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { History } from 'lucide-react-native';
+import { History, Flag } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
+import DeviceInfo from 'react-native-device-info';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CalculatorScreenTemplate, buildTheme } from '@calc/ui';
 import type { Values } from '@calc/engine';
@@ -11,6 +13,7 @@ import { electro } from '../brand';
 import { decimalSeparatorFor } from '../i18n/i18n';
 import { getUnitsSystem } from '../lib/settings';
 import { useCalculatorState } from '../state/useCalculatorState';
+import { buildFeedbackMailtoUrl } from '../feedback/buildFeedbackMailto';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calculator'>;
 
@@ -44,6 +47,20 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
     [navigation],
   );
 
+  const onReportIssue = useCallback(() => {
+    if (!calculator) return;
+    Linking.openURL(
+      buildFeedbackMailtoUrl({
+        supportEmail: electro.supportEmail,
+        appVersion: DeviceInfo.getVersion(),
+        os: Platform.OS,
+        osVersion: String(Platform.Version),
+        calculatorTitle: t(calculator.titleKey),
+        calculatorValues: values,
+      }),
+    );
+  }, [calculator, t, values]);
+
   if (!calculator) return null;
 
   return (
@@ -66,6 +83,8 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
         onOpenHistory={() => navigation.navigate('History')}
         historyIcon={<History size={16} color={theme.colors.textSecondary} />}
         onChainTo={onChainTo}
+        onReportIssue={onReportIssue}
+        reportIssueIcon={<Flag size={16} color={theme.colors.textSecondary} />}
       />
     </SafeAreaView>
   );

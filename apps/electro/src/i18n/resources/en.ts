@@ -206,18 +206,26 @@ export const en: Record<string, string> = {
   // App chrome: Menu ("More")
   'ui.menu.title': 'More',
   'ui.menu.exportPdf': 'Export to PDF',
-  'ui.menu.restorePurchases': 'Restore purchases',
+  'ui.menu.manageSubscription': 'Manage subscription',
   'ui.menu.settingsRow': 'Settings',
+  'ui.menu.feedback': 'Send feedback',
 
-  // App chrome: Paywall
-  'ui.paywall.title': 'AmpCore Pro',
-  'ui.paywall.unlockHeadline': 'Unlock every calculator',
-  'ui.paywall.proCalculatorsSummary':
-    '{{count}} pro calculators and unlimited history',
-  'ui.paywall.includesTitle': 'Includes',
-  'ui.paywall.ctaPlaceholder': 'Upgrade — coming soon',
-  'ui.paywall.noPaymentNotice':
-    'No payment integration yet — nothing to buy here.',
+  // App chrome: Calculator screen — report-issue entry point (header, next to history)
+  'ui.calculator.reportIssue': 'Report an issue',
+
+  // App chrome: Paywall — most of the paywall content (headline, pricing,
+  // CTA) is owned by RevenueCat's dashboard-configured template, not here.
+  // These two only cover the "already subscribed" state this screen shows
+  // instead of the purchase paywall.
+  'ui.paywall.alreadyProTitle': "You're on Pro",
+  'ui.paywall.alreadyProBody': 'All calculators are unlocked. Thanks for subscribing!',
+  'ui.paywall.close': 'Close',
+
+  // App chrome: subscriptions — fallback error shown only if presenting the
+  // RevenueCat Paywall/Customer Center itself fails (e.g. native module
+  // missing); purchase/restore outcomes are handled by those native UIs.
+  'ui.subscriptions.errorTitle': 'Something went wrong',
+  'ui.subscriptions.errorBody': 'Please try again.',
 
   // App chrome: Settings (language)
   'ui.common.soonBadge': 'SOON',
