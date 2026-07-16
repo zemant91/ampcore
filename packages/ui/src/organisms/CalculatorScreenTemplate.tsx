@@ -25,6 +25,9 @@ export interface CalculatorScreenTemplateProps {
   historyIcon?: ReactNode;
   /** Only present if outputs are set — a chainTo jump with no ready result makes no sense */
   onChainTo?: (calculatorId: string, mappedValues: Partial<Values>) => void;
+  /** Header icon button next to history, prefilled with this calculator's title/values — omit to render no button at all */
+  onReportIssue?: () => void;
+  reportIssueIcon?: ReactNode;
 }
 
 function warningColor(key: WarningKey, theme: ThemeTokens): string {
@@ -58,6 +61,8 @@ export function CalculatorScreenTemplate({
   onOpenHistory,
   historyIcon,
   onChainTo,
+  onReportIssue,
+  reportIssueIcon,
 }: CalculatorScreenTemplateProps): ReactElement {
   const iconButtonStyle = {
     width: 36,
@@ -92,6 +97,11 @@ export function CalculatorScreenTemplate({
         >
           {resolveLabel(calculator.titleKey)}
         </Text>
+        {onReportIssue !== undefined && (
+          <Pressable style={iconButtonStyle} onPress={onReportIssue} testID="calculator-screen-report-issue">
+            {reportIssueIcon ?? <Text style={{ color: theme.colors.textSecondary, fontSize: 16 }}>⚑</Text>}
+          </Pressable>
+        )}
         <Pressable style={iconButtonStyle} onPress={onOpenHistory} testID="calculator-screen-history">
           {historyIcon ?? <Text style={{ color: theme.colors.textSecondary, fontSize: 16 }}>⏱</Text>}
         </Pressable>

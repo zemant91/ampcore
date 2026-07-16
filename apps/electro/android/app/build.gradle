@@ -1,6 +1,14 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+
+// Debug reads a RevenueCat Test Store key (fast local iteration without
+// real Play Console products); release must use the real goog_ key —
+// RevenueCat's SDK refuses simulated-store keys in release builds.
+project.ext.envConfigFiles = [
+    debug: ".env.debug",
+    release: ".env.production",
+]
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**

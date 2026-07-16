@@ -169,6 +169,7 @@ describe('BrandConfig: smoke test with the real electro brand', () => {
       legalDisclaimerKey: 'legal.disclaimer',
       onboarding: { welcomeTitleKey: 'onboarding.welcome.title', welcomeBodyKey: 'onboarding.welcome.body' },
       paywall: { valueProps: ['paywall.cableChain', 'paywall.pdfExport', 'paywall.unlimitedHistory'] },
+      supportEmail: 'feedback@electrocalc.eu',
     };
 
     expect(electro.calculators).toHaveLength(1);

@@ -14,6 +14,16 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+# RevenueCat's SDK deliberately crashes (assertionFailure) if configured with
+# a Test Store key ("test_...") in a Release build — that's the app's own
+# safety net against shipping simulated purchases to real users. So Debug
+# and Release must read different .env files: .env.debug (Test Store key,
+# fast local iteration) vs .env.production (real appl_/goog_ store keys).
+ENVFILES = {
+  'Debug' => '$(PODS_ROOT)/../../.env.debug',
+  'Release' => '$(PODS_ROOT)/../../.env.production',
+}
+
 target 'electro' do
   config = use_native_modules!
 
@@ -30,5 +40,12 @@ target 'electro' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |build_config|
+        if target.name == 'react-native-config'
+          build_config.build_settings['ENVFILE'] = ENVFILES[build_config.name]
+        end
+      end
+    end
   end
 end

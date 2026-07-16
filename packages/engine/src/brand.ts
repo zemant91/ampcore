@@ -63,4 +63,6 @@ export interface BrandConfig {
     /** i18n keys for paywall bullets — brand-specific, while the products (pro_monthly/pro_lifetime) are shared */
     valueProps: string[];
   };
+  /** Destination for the "send feedback" mailto: link on the More screen (and the optional per-calculator report-issue entry point) */
+  supportEmail: string;
 }

@@ -41,9 +41,9 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# react-native-config — real secrets live only in .env, never commit it
-.env
-.env.*.local
+# react-native-config — real secrets live only in .env.*, never commit them
+.env*
+!.env.example
 
 # fastlane
 #
