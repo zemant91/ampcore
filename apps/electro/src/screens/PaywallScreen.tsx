@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
@@ -22,6 +22,7 @@ const theme = buildTheme(electro.theme.accent);
 export function PaywallScreen({ navigation }: Props): ReactElement {
   const { t } = useTranslation();
   const { isPro } = useEntitlement();
+  const insets = useSafeAreaInsets();
 
   if (isPro) {
     return (
@@ -90,6 +91,27 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
         onPurchaseCompleted={() => navigation.goBack()}
         onRestoreCompleted={() => navigation.goBack()}
       />
+      {/* RevenueCat's dashboard-configured close button (displayCloseButton) is
+       * ignored for V2 paywall templates, so without this the native view has
+       * no way back — this floating button is the app-side fallback RevenueCat
+       * support points to. */}
+      <Pressable
+        style={{
+          position: 'absolute',
+          top: insets.top - theme.layout.spacingUnit,
+          left: insets.left + theme.layout.spacingUnit * 2,
+          width: 36,
+          height: 36,
+          borderRadius: 18,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(0,0,0,0.4)',
+        }}
+        onPress={() => navigation.goBack()}
+        testID="paywall-back"
+      >
+        <Text style={{ color: '#fff', fontSize: 18 }}>‹</Text>
+      </Pressable>
     </SafeAreaView>
   );
 }
