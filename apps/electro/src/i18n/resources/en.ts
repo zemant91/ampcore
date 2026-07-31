@@ -227,6 +227,13 @@ export const en: Record<string, string> = {
   'ui.subscriptions.errorTitle': 'Something went wrong',
   'ui.subscriptions.errorBody': 'Please try again.',
 
+  // PDF report (generated from the calculator screen's header button)
+  'pdf.inputsHeading': 'Inputs',
+  'pdf.outputsHeading': 'Results',
+  'pdf.generatedOn': 'Generated on',
+  'pdf.errorTitle': "Couldn't create PDF",
+  'pdf.errorBody': 'Please try again.',
+
   // App chrome: Settings (language)
   'ui.common.soonBadge': 'SOON',
 

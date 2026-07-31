@@ -3,6 +3,28 @@ PODS:
   - hermes-engine (250829098.0.14):
     - hermes-engine/Pre-built (= 250829098.0.14)
   - hermes-engine/Pre-built (250829098.0.14)
+  - HtmlToPdf (1.3.0):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - PurchasesHybridCommon (18.21.0):
     - RevenueCat (= 5.80.3)
   - PurchasesHybridCommonUI (18.21.0):
@@ -2023,6 +2045,28 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - RNShare (12.3.1):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNSVG (15.15.5):
     - hermes-engine
     - RCTRequired
@@ -2073,6 +2117,7 @@ PODS:
 DEPENDENCIES:
   - FBLazyVector (from `../../../node_modules/react-native/Libraries/FBLazyVector`)
   - hermes-engine (from `../../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - HtmlToPdf (from `../../../node_modules/react-native-html-to-pdf`)
   - RCTDeprecation (from `../../../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../../../node_modules/react-native/Libraries/Required`)
   - RCTSwiftUI (from `../../../node_modules/react-native/ReactApple/RCTSwiftUI`)
@@ -2154,6 +2199,7 @@ DEPENDENCIES:
   - RNPaywalls (from `../../../node_modules/react-native-purchases-ui`)
   - RNPurchases (from `../../../node_modules/react-native-purchases`)
   - RNScreens (from `../../../node_modules/react-native-screens`)
+  - RNShare (from `../../../node_modules/react-native-share`)
   - RNSVG (from `../../../node_modules/react-native-svg`)
   - Yoga (from `../../../node_modules/react-native/ReactCommon/yoga`)
 
@@ -2170,6 +2216,8 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-v250829098.0.14
+  HtmlToPdf:
+    :path: "../../../node_modules/react-native-html-to-pdf"
   RCTDeprecation:
     :path: "../../../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation"
   RCTRequired:
@@ -2330,6 +2378,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/react-native-purchases"
   RNScreens:
     :path: "../../../node_modules/react-native-screens"
+  RNShare:
+    :path: "../../../node_modules/react-native-share"
   RNSVG:
     :path: "../../../node_modules/react-native-svg"
   Yoga:
@@ -2338,6 +2388,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   FBLazyVector: b3e7ad108f0d882e30445c5527d774e3fd432f3d
   hermes-engine: 56e919bd704c53b19cbe7c3fc56a76d7079824a5
+  HtmlToPdf: 32f1a9bc86f222c5e9288c06ffad44925be76393
   PurchasesHybridCommon: 097af88db3cb39b415bef2f3140e6b3324899756
   PurchasesHybridCommonUI: 860a7cc1cf1d16b7c68cc03923003acf5e84c74c
   RCTDeprecation: 2a74a2c57675e64419bd89078efde81f7c1de90b
@@ -2422,6 +2473,7 @@ SPEC CHECKSUMS:
   RNPaywalls: 619df9b4ea7c284d060d75c6eb1d15efeef6bf3b
   RNPurchases: 33dbce0054a0833a8c20c8d6244e971dfedaa0c3
   RNScreens: 62693e770c4b73093c018aa7845b691f5ba9988d
+  RNShare: 7344a3a7d4e5df58c356ad0f79e4a3ef1325c635
   RNSVG: 6cae8d4082913be2eb43eaec2a456222c42195ed
   Yoga: fe50ab299e578f397fef753cf309c6703a4db29b
 

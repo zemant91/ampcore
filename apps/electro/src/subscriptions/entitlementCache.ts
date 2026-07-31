@@ -17,3 +17,23 @@ export function getCachedIsPro(): boolean {
 export function setCachedIsPro(isPro: boolean): void {
   storage.set(IS_PRO_KEY, isPro);
 }
+
+const DEV_PRO_OVERRIDE_KEY = 'electrocalc_dev_pro_override';
+
+/**
+ * __DEV__-only: forces isPro on/off for testing Pro-gated features without a
+ * real RevenueCat purchase (see DevMenuButton). null means "no override, use
+ * the real entitlement" — distinct from a stored false, hence `contains()`
+ * rather than a `?? null` default on getBoolean().
+ */
+export function getDevProOverride(): boolean | null {
+  return storage.contains(DEV_PRO_OVERRIDE_KEY) ? (storage.getBoolean(DEV_PRO_OVERRIDE_KEY) ?? null) : null;
+}
+
+export function setDevProOverride(value: boolean | null): void {
+  if (value === null) {
+    storage.delete(DEV_PRO_OVERRIDE_KEY);
+  } else {
+    storage.set(DEV_PRO_OVERRIDE_KEY, value);
+  }
+}

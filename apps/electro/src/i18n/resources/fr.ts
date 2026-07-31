@@ -191,6 +191,13 @@ export const fr: Record<string, string> = {
   'ui.subscriptions.errorTitle': 'Un problème est survenu',
   'ui.subscriptions.errorBody': 'Veuillez réessayer.',
 
+  // PDF report (generated from the calculator screen's header button)
+  'pdf.inputsHeading': 'Entrées',
+  'pdf.outputsHeading': 'Résultats',
+  'pdf.generatedOn': 'Généré le',
+  'pdf.errorTitle': 'Impossible de créer le PDF',
+  'pdf.errorBody': 'Veuillez réessayer.',
+
   'ui.common.soonBadge': 'BIENTÔT',
 
   'ui.settings.title': 'Paramètres',

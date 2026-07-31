@@ -1,0 +1,87 @@
+import type { HistoryField } from '../lib/history';
+
+export interface ReportData {
+  brandName: string;
+  calculatorTitle: string;
+  formulaLines: string[];
+  inputs: HistoryField[];
+  outputs: HistoryField[];
+  inputsHeading: string;
+  outputsHeading: string;
+  generatedOnLabel: string;
+  disclaimer: string;
+}
+
+// Escapes values that ultimately come from user input (field values) or
+// translation strings, before splicing them into the HTML string below —
+// none of it is untrusted in the web sense (no network/remote content), but
+// a stray "<" or "&" in a value would otherwise break the markup.
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderFieldRows(fields: HistoryField[]): string {
+  return fields
+    .map(
+      (field) => `
+        <tr>
+          <td class="label">${escapeHtml(field.label)}</td>
+          <td class="value">${escapeHtml(field.value)}${field.unit ? ` <span class="unit">${escapeHtml(field.unit)}</span>` : ''}</td>
+        </tr>`,
+    )
+    .join('');
+}
+
+/**
+ * Pure HTML builder — every string it receives is already resolved (t()
+ * called by the caller), so this has no i18n/react-native dependency and is
+ * trivial to unit-test.
+ */
+export function buildReportHtml(data: ReportData): string {
+  const formulaBlock =
+    data.formulaLines.length > 0
+      ? `<div class="formula">${data.formulaLines.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}</div>`
+      : '';
+
+  return `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        font-family: -apple-system, Roboto, Helvetica, Arial, sans-serif;
+        color: #1a1a1a;
+        padding: 24px;
+      }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      .brand { font-size: 12px; color: #666; margin: 0 0 24px; }
+      h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: #666; margin: 20px 0 8px; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+      td { padding: 6px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+      td.label { color: #555; }
+      td.value { text-align: right; font-weight: 600; }
+      .unit { font-weight: 400; color: #888; }
+      .formula { font-family: 'Courier New', monospace; font-size: 15px; background: #f6f5f0; border-radius: 8px; padding: 12px 16px; margin: 8px 0 20px; }
+      .disclaimer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #eee; font-size: 10px; line-height: 1.5; color: #888; }
+    </style>
+  </head>
+  <body>
+    <h1>${escapeHtml(data.calculatorTitle)}</h1>
+    <p class="brand">${escapeHtml(data.brandName)} &middot; ${escapeHtml(data.generatedOnLabel)}</p>
+
+    ${formulaBlock}
+
+    <h2>${escapeHtml(data.inputsHeading)}</h2>
+    <table>${renderFieldRows(data.inputs)}</table>
+
+    <h2>${escapeHtml(data.outputsHeading)}</h2>
+    <table>${renderFieldRows(data.outputs)}</table>
+
+    <p class="disclaimer">${escapeHtml(data.disclaimer)}</p>
+  </body>
+</html>`;
+}

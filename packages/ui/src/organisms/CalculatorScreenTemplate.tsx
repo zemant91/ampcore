@@ -28,6 +28,9 @@ export interface CalculatorScreenTemplateProps {
   /** Header icon button next to history, prefilled with this calculator's title/values — omit to render no button at all */
   onReportIssue?: () => void;
   reportIssueIcon?: ReactNode;
+  /** Header icon button for generating a PDF report — only rendered once outputs exist (see onChainTo's same condition below); omit to render no button at all */
+  onGeneratePdf?: () => void;
+  generatePdfIcon?: ReactNode;
 }
 
 function warningColor(key: WarningKey, theme: ThemeTokens): string {
@@ -63,6 +66,8 @@ export function CalculatorScreenTemplate({
   onChainTo,
   onReportIssue,
   reportIssueIcon,
+  onGeneratePdf,
+  generatePdfIcon,
 }: CalculatorScreenTemplateProps): ReactElement {
   const iconButtonStyle = {
     width: 36,
@@ -100,6 +105,11 @@ export function CalculatorScreenTemplate({
         {onReportIssue !== undefined && (
           <Pressable style={iconButtonStyle} onPress={onReportIssue} testID="calculator-screen-report-issue">
             {reportIssueIcon ?? <Text style={{ color: theme.colors.textSecondary, fontSize: 16 }}>⚑</Text>}
+          </Pressable>
+        )}
+        {outputs !== undefined && onGeneratePdf !== undefined && (
+          <Pressable style={iconButtonStyle} onPress={onGeneratePdf} testID="calculator-screen-generate-pdf">
+            {generatePdfIcon ?? <Text style={{ color: theme.colors.textSecondary, fontSize: 16 }}>▤</Text>}
           </Pressable>
         )}
         <Pressable style={iconButtonStyle} onPress={onOpenHistory} testID="calculator-screen-history">

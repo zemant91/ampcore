@@ -190,6 +190,13 @@ export const it: Record<string, string> = {
   'ui.subscriptions.errorTitle': 'Qualcosa è andato storto',
   'ui.subscriptions.errorBody': 'Riprova.',
 
+  // PDF report (generated from the calculator screen's header button)
+  'pdf.inputsHeading': 'Dati inseriti',
+  'pdf.outputsHeading': 'Risultati',
+  'pdf.generatedOn': 'Generato il',
+  'pdf.errorTitle': 'Impossibile creare il PDF',
+  'pdf.errorBody': 'Riprova.',
+
   'ui.common.soonBadge': 'PRESTO',
 
   'ui.settings.title': 'Impostazioni',

@@ -191,6 +191,13 @@ export const de: Record<string, string> = {
   'ui.subscriptions.errorTitle': 'Etwas ist schiefgelaufen',
   'ui.subscriptions.errorBody': 'Bitte versuche es erneut.',
 
+  // PDF report (generated from the calculator screen's header button)
+  'pdf.inputsHeading': 'Eingaben',
+  'pdf.outputsHeading': 'Ergebnisse',
+  'pdf.generatedOn': 'Erstellt am',
+  'pdf.errorTitle': 'PDF konnte nicht erstellt werden',
+  'pdf.errorBody': 'Bitte versuche es erneut.',
+
   'ui.common.soonBadge': 'DEMNÄCHST',
 
   'ui.settings.title': 'Einstellungen',

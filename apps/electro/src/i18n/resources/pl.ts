@@ -188,6 +188,13 @@ export const pl: Record<string, string> = {
   'ui.subscriptions.errorTitle': 'Coś poszło nie tak',
   'ui.subscriptions.errorBody': 'Spróbuj ponownie.',
 
+  // PDF report (generated from the calculator screen's header button)
+  'pdf.inputsHeading': 'Dane wejściowe',
+  'pdf.outputsHeading': 'Wyniki',
+  'pdf.generatedOn': 'Wygenerowano',
+  'pdf.errorTitle': 'Nie udało się utworzyć PDF',
+  'pdf.errorBody': 'Spróbuj ponownie.',
+
   'ui.common.soonBadge': 'WKRÓTCE',
 
   'ui.settings.title': 'Ustawienia',

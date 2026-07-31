@@ -4,7 +4,13 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android:dev": "react-native run-android --mode debug",
+    "android:prod": "react-native run-android --mode release",
     "ios": "react-native run-ios",
+    "ios:dev": "react-native run-ios --mode Debug",
+    "ios:dev:device": "react-native run-ios --mode Debug --device",
+    "ios:prod": "react-native run-ios --mode Release",
+    "ios:prod:device": "react-native run-ios --mode Release --device",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
@@ -22,14 +28,16 @@
     "react": "19.2.3",
     "react-i18next": "^17.0.9",
     "react-native": "0.86.0",
-    "react-native-localize": "^3.7.0",
-    "react-native-device-info": "^15.0.2",
     "react-native-config": "^1.6.1",
+    "react-native-device-info": "^15.0.2",
+    "react-native-html-to-pdf": "^1.3.0",
+    "react-native-localize": "^3.7.0",
     "react-native-mmkv": "^3.3.0",
     "react-native-purchases": "^10.4.3",
     "react-native-purchases-ui": "^10.4.3",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.26.0",
+    "react-native-share": "^12.3.1",
     "react-native-svg": "^15.15.5"
   },
   "devDependencies": {

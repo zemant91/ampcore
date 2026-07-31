@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react';
-import { useCallback } from 'react';
-import { Linking, Platform } from 'react-native';
+import { useCallback, useState } from 'react';
+import { Alert, Linking, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { History, Flag } from 'lucide-react-native';
+import { History, Flag, FileText } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -14,6 +14,8 @@ import { decimalSeparatorFor } from '../i18n/i18n';
 import { getUnitsSystem } from '../lib/settings';
 import { useCalculatorState } from '../state/useCalculatorState';
 import { buildFeedbackMailtoUrl } from '../feedback/buildFeedbackMailto';
+import { useEntitlement } from '../subscriptions';
+import { generatePdfReport } from '../pdf/generatePdfReport';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calculator'>;
 
@@ -28,6 +30,8 @@ const theme = buildTheme(electro.theme.accent);
  */
 export function CalculatorScreen({ route, navigation }: Props): ReactElement | null {
   const { t, i18n } = useTranslation();
+  const { isPro } = useEntitlement();
+  const [generatingPdf, setGeneratingPdf] = useState(false);
   const { calculatorId, initialValues } = route.params;
   const calculator = electro.calculators.find((c) => c.id === calculatorId);
 
@@ -61,6 +65,32 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
     );
   }, [calculator, t, values]);
 
+  const onGeneratePdf = useCallback(() => {
+    if (!calculator || outputs === undefined || generatingPdf) return;
+
+    if (!isPro) {
+      navigation.navigate('Paywall');
+      return;
+    }
+
+    setGeneratingPdf(true);
+    generatePdfReport({
+      calculator,
+      values,
+      outputs,
+      resolveLabel: t,
+      language: i18n.language,
+      brandName: electro.displayName,
+      disclaimerKey: electro.legalDisclaimerKey,
+    })
+      .catch(() => {
+        Alert.alert(t('pdf.errorTitle'), t('pdf.errorBody'));
+      })
+      .finally(() => {
+        setGeneratingPdf(false);
+      });
+  }, [calculator, generatingPdf, isPro, navigation, outputs, values, t, i18n.language]);
+
   if (!calculator) return null;
 
   return (
@@ -85,6 +115,8 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
         onChainTo={onChainTo}
         onReportIssue={onReportIssue}
         reportIssueIcon={<Flag size={16} color={theme.colors.textSecondary} />}
+        onGeneratePdf={onGeneratePdf}
+        generatePdfIcon={<FileText size={16} color={theme.colors.textSecondary} />}
       />
     </SafeAreaView>
   );
