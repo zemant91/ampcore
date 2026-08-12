@@ -1,4 +1,4 @@
-import Purchases, { LOG_LEVEL, type CustomerInfo } from 'react-native-purchases';
+import Purchases, { LOG_LEVEL, type CustomerInfo, type PurchasesOffering } from 'react-native-purchases';
 import { getRevenueCatApiKey, PRO_ENTITLEMENT_ID } from './config';
 
 let configured = false;
@@ -33,5 +33,12 @@ export async function fetchCustomerInfo(): Promise<CustomerInfo> {
   return Purchases.getCustomerInfo();
 }
 
+/** offeringId falls back to the dashboard's Current offering if unset or not found (e.g. in production, or a stale/deleted dev override). */
+export async function fetchPaywallOffering(offeringId?: string | null): Promise<PurchasesOffering | null> {
+  const offerings = await Purchases.getOfferings();
+  if (offeringId) return offerings.all[offeringId] ?? offerings.current;
+  return offerings.current;
+}
+
 export { PRO_ENTITLEMENT_ID } from './config';
-export type { CustomerInfo };
+export type { CustomerInfo, PurchasesOffering };

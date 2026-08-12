@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +8,13 @@ import { buildTheme } from '@calc/ui';
 import RevenueCatUI from 'react-native-purchases-ui';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
-import { presentCustomerCenter, useEntitlement } from '../subscriptions';
+import {
+  presentCustomerCenter,
+  useEntitlement,
+  fetchPaywallOffering,
+  getDevOfferingId,
+  type PurchasesOffering,
+} from '../subscriptions';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Paywall'>;
 
@@ -23,6 +30,15 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
   const { t } = useTranslation();
   const { isPro } = useEntitlement();
   const insets = useSafeAreaInsets();
+  // undefined = not fetched yet (don't render Paywall, it would default-fetch
+  // Current itself and flash that before this resolves); null = fetched, no
+  // matching offering (still render, so RevenueCat's own native error shows).
+  const [offering, setOffering] = useState<PurchasesOffering | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (isPro) return;
+    fetchPaywallOffering(__DEV__ ? getDevOfferingId() : null).then(setOffering);
+  }, [isPro]);
 
   if (isPro) {
     return (
@@ -85,12 +101,15 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top', 'left', 'right']}>
-      <RevenueCatUI.Paywall
-        style={{ flex: 1 }}
-        onDismiss={() => navigation.goBack()}
-        onPurchaseCompleted={() => navigation.goBack()}
-        onRestoreCompleted={() => navigation.goBack()}
-      />
+      {offering !== undefined && (
+        <RevenueCatUI.Paywall
+          style={{ flex: 1 }}
+          options={offering ? { offering } : undefined}
+          onDismiss={() => navigation.goBack()}
+          onPurchaseCompleted={() => navigation.goBack()}
+          onRestoreCompleted={() => navigation.goBack()}
+        />
+      )}
       {/* RevenueCat's dashboard-configured close button (displayCloseButton) is
        * ignored for V2 paywall templates, so without this the native view has
        * no way back — this floating button is the app-side fallback RevenueCat

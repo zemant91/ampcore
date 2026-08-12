@@ -37,3 +37,23 @@ export function setDevProOverride(value: boolean | null): void {
     storage.set(DEV_PRO_OVERRIDE_KEY, value);
   }
 }
+
+const DEV_OFFERING_ID_KEY = 'electrocalc_dev_offering_id';
+
+/**
+ * __DEV__-only: forces PaywallScreen to load a specific RevenueCat offering
+ * identifier (e.g. "test") instead of whatever's marked Current in the
+ * dashboard — lets you flip between the test and prod paywall from the app
+ * itself (see DevMenuButton) without touching the RevenueCat dashboard.
+ */
+export function getDevOfferingId(): string | null {
+  return storage.getString(DEV_OFFERING_ID_KEY) ?? null;
+}
+
+export function setDevOfferingId(value: string | null): void {
+  if (value === null) {
+    storage.delete(DEV_OFFERING_ID_KEY);
+  } else {
+    storage.set(DEV_OFFERING_ID_KEY, value);
+  }
+}

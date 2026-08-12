@@ -3,9 +3,12 @@ import { useState } from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { Chip, buildTheme } from '@calc/ui';
 import { electro } from '../brand';
-import { useEntitlement } from '../subscriptions';
+import { useEntitlement, getDevOfferingId, setDevOfferingId } from '../subscriptions';
 
 const theme = buildTheme(electro.theme.accent);
+
+/** Matches the "test" Offering identifier created in the RevenueCat dashboard for local paywall testing. */
+const TEST_OFFERING_ID = 'test';
 
 /**
  * Floating dev-only toggle for forcing the Pro entitlement on/off without a
@@ -19,6 +22,7 @@ const theme = buildTheme(electro.theme.accent);
 export function DevMenuButton(): ReactElement | null {
   const { devProOverride, setDevProOverride } = useEntitlement();
   const [open, setOpen] = useState(false);
+  const [devOfferingId, setDevOfferingIdState] = useState(getDevOfferingId);
 
   if (!__DEV__) return null;
 
@@ -82,6 +86,30 @@ export function DevMenuButton(): ReactElement | null {
                 active={devProOverride === false}
                 theme={theme}
                 onPress={() => setDevProOverride(false)}
+              />
+            </View>
+
+            <Text style={{ fontSize: 13, color: '#666' }}>
+              Paywall offering — which RevenueCat offering PaywallScreen loads, independent of the dashboard's Current setting.
+            </Text>
+            <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
+              <Chip
+                label="Prod (Current)"
+                active={devOfferingId === null}
+                theme={theme}
+                onPress={() => {
+                  setDevOfferingId(null);
+                  setDevOfferingIdState(null);
+                }}
+              />
+              <Chip
+                label="Test"
+                active={devOfferingId === TEST_OFFERING_ID}
+                theme={theme}
+                onPress={() => {
+                  setDevOfferingId(TEST_OFFERING_ID);
+                  setDevOfferingIdState(TEST_OFFERING_ID);
+                }}
               />
             </View>
           </Pressable>
