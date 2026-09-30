@@ -12,7 +12,11 @@ export interface HistoryEntry {
   calculatorId: string; // CalculatorDef.id, e.g. "ohms_law" — matches the calculator screen's route param
   calculatorName: string;
   fields: HistoryField[]; // fields the user filled in, for the list summary
-  result: HistoryField; // the primary result (the calculator's first output field)
+  result: HistoryField; // the primary result (first calculated field) — the list-row summary
+  // Added later: entries saved before this lack them (see entryOutputs in HistoryScreen/PDF).
+  outputs?: HistoryField[]; // every calculated field, `result` included
+  warnings?: string[]; // resolved warning texts
+  formulaLines?: string[]; // resolved formula chips
 }
 
 const KEY = 'electrocalc_history';

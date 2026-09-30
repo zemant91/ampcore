@@ -42,6 +42,12 @@ target 'electro' do
     )
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |build_config|
+        # Xcode 27 rejects pod targets below its supported deployment range
+        # (some pods still declare 9.0/12.4/13.0) — raise them to the app's minimum.
+        current = build_config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
+        if current.nil? || Gem::Version.new(current) < Gem::Version.new(min_ios_version_supported)
+          build_config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = min_ios_version_supported
+        end
         if target.name == 'react-native-config'
           build_config.build_settings['ENVFILE'] = ENVFILES[build_config.name]
         end

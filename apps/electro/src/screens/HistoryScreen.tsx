@@ -4,10 +4,14 @@ import { FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { Alert } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
+import { FileText } from 'lucide-react-native';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
+import { generatePdfReport } from '../pdf/generatePdfReport';
+import { useEntitlement } from '../subscriptions';
 import { loadHistory, deleteEntry, clearHistory } from '../lib/history';
 import type { HistoryEntry } from '../lib/history';
 
@@ -25,7 +29,8 @@ const iconButtonStyle = {
 };
 
 export function HistoryScreen({ navigation }: Props): ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { isPro } = useEntitlement();
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -36,6 +41,27 @@ export function HistoryScreen({ navigation }: Props): ReactElement {
       setEntries(loadHistory());
     }, []),
   );
+
+  const onExportPdf = (entry: HistoryEntry) => {
+    if (!isPro) {
+      navigation.navigate('Paywall');
+      return;
+    }
+    generatePdfReport({
+      calculatorTitle: entry.calculatorName,
+      snapshot: {
+        formulaLines: entry.formulaLines ?? [],
+        inputs: entry.fields,
+        outputs: entry.outputs ?? [entry.result], // entries saved before `outputs` existed
+        warnings: entry.warnings ?? [],
+      },
+      calculatedAt: entry.timestamp,
+      resolveLabel: t,
+      language: i18n.language,
+      brandName: electro.displayName,
+      disclaimerKey: electro.legalDisclaimerKey,
+    }).catch(() => Alert.alert(t('pdf.errorTitle'), t('pdf.errorBody')));
+  };
 
   return (
     <SafeAreaView
@@ -129,9 +155,16 @@ export function HistoryScreen({ navigation }: Props): ReactElement {
                       {item.result.label} = {item.result.value} {item.result.unit}
                     </Text>
                   </View>
-                  {item.fields.length > 0 && (
+                  {(item.fields.length > 0 || (item.outputs?.length ?? 0) > 1) && (
                     <Text style={{ color: theme.colors.textSecondary, fontSize: 16 }}>{expanded ? '⌄' : '›'}</Text>
                   )}
+                </Pressable>
+                <Pressable
+                  style={{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }}
+                  onPress={() => onExportPdf(item)}
+                  testID={`history-entry-pdf-${item.id}`}
+                >
+                  <FileText size={16} color={theme.colors.textSecondary} />
                 </Pressable>
                 <Pressable
                   style={{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }}
@@ -146,7 +179,7 @@ export function HistoryScreen({ navigation }: Props): ReactElement {
                 </Pressable>
               </View>
 
-              {expanded && item.fields.length > 0 && (
+              {expanded && (item.fields.length > 0 || (item.outputs?.length ?? 0) > 1) && (
                 <View
                   style={{
                     gap: 4,
@@ -158,7 +191,7 @@ export function HistoryScreen({ navigation }: Props): ReactElement {
                   }}
                   testID={`history-entry-details-${item.id}`}
                 >
-                  {item.fields.map((field, index) => (
+                  {[...item.fields, ...(item.outputs?.slice(1) ?? [])].map((field, index) => (
                     <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                       <Text
                         style={{ color: theme.colors.textSecondary, fontFamily: theme.typography.uiFontFamily, fontSize: 13 }}

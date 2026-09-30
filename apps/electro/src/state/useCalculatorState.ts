@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { CalculatorDef, FieldDef, Values, WarningKey } from '@calc/engine';
-import { resolveFieldLabel } from '@calc/engine';
+import type { CalculatorDef, Values, WarningKey } from '@calc/engine';
 import { createDataAccess } from '@calc/data';
+import { electro } from '../brand';
+import { getUnitsSystem } from '../lib/settings';
 import { saveEntry } from '../lib/history';
-import type { HistoryField } from '../lib/history';
+import { buildCalculationSnapshot } from './buildCalculationSnapshot';
 import { applyDynamicFieldChange } from './dynamicFieldEviction';
 import type { DynamicFieldState } from './dynamicFieldEviction';
 
@@ -15,26 +16,6 @@ export interface CalculatorState {
   outputs: Values | undefined;
   warnings: WarningKey[];
   onChangeValue: (fieldId: string, value: string | number | undefined) => void;
-}
-
-/**
- * A field's raw value as it should show up in history: for an `options`
- * field this resolves the matching option's labelKey ('dc' -> "DC"), not
- * the raw stored value — and skips the unit suffix in that case, since the
- * resolved label already reads naturally on its own (e.g. "20°C").
- */
-export function formatFieldForHistory(
-  field: FieldDef,
-  mergedValues: Values,
-  resolveLabel: (key: string) => string,
-): HistoryField {
-  const rawValue = mergedValues[field.id];
-  const option = field.options?.find((o) => o.value === rawValue);
-  return {
-    label: resolveLabel(resolveFieldLabel(field, mergedValues)),
-    value: option ? resolveLabel(option.labelKey) : String(rawValue),
-    unit: option ? '' : (field.defaultUnit ?? ''),
-  };
 }
 
 /**
@@ -82,33 +63,39 @@ export function useCalculatorState(
 
   useEffect(() => {
     if (outputs === undefined) return;
-    const primaryOutputField = calculator.fields.find((f) => f.role === 'output');
-    if (!primaryOutputField) return;
 
-    const resultValue = outputs[primaryOutputField.id];
-    if (resultValue === undefined) return;
-
-    const dedupeKey = `${calculator.id}|${resultValue}`;
+    // Keyed on the inputs, not just the result: changing an input that
+    // leaves the primary result unchanged is still a new calculation.
+    const dedupeKey = `${calculator.id}|${JSON.stringify(values)}`;
     if (dedupeKey === lastSavedKeyRef.current) return;
 
-    const mergedValues: Values = { ...values, ...outputs };
-
     const timer = setTimeout(() => {
+      const snapshot = buildCalculationSnapshot({
+        calculator,
+        values,
+        outputs,
+        warnings,
+        resolveLabel: t,
+        unitsSystem: getUnitsSystem(electro.defaultUnitsSystem),
+      });
+      const [result] = snapshot.outputs;
+      if (!result) return;
       saveEntry({
         id: Math.random().toString(36).slice(2, 10),
         timestamp: Date.now(),
         calculatorId: calculator.id,
         calculatorName: t(calculator.titleKey),
-        fields: calculator.fields
-          .filter((f) => f.role === 'input' && values[f.id] !== undefined)
-          .map((f) => formatFieldForHistory(f, mergedValues, t)),
-        result: formatFieldForHistory(primaryOutputField, mergedValues, t),
+        fields: snapshot.inputs,
+        result,
+        outputs: snapshot.outputs,
+        warnings: snapshot.warnings,
+        formulaLines: snapshot.formulaLines,
       });
       lastSavedKeyRef.current = dedupeKey;
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [calculator, outputs, values, t]);
+  }, [calculator, outputs, values, warnings, t]);
 
   return { values, outputs, warnings, onChangeValue };
 }

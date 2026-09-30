@@ -7,8 +7,8 @@
 A header button on the calculator screen (`CalculatorScreenTemplate`'s
 `onGeneratePdf`/`generatePdfIcon` props, next to report-issue/history) —
 visible once a calculation has a result — generates a one-page PDF report
-(calculator title, formula, inputs, results, brand name, generation date,
-the app's legal disclaimer) and hands it to the system share sheet.
+(calculator title, formula, inputs, all results, warnings, brand name,
+date, the app's legal disclaimer) and hands it to the system share sheet.
 
 This was already promised to users before it existed: `paywall.pdfExport`
 in the paywall's value props, and a disabled `ComingSoonRow` in `MenuScreen`
@@ -63,11 +63,14 @@ the `MenuScreen` row is intentionally left as a "coming soon" placeholder
 
 ## Limitations (not implemented)
 
-- **No PDF export from History.** `HistoryEntry` (`apps/electro/src/lib/history.ts`)
-  only stores the primary output field per past calculation, not every
-  output — generating a full report from a history entry would need a
-  storage format migration. Out of scope for now; the header button only
-  works from a live calculator screen where all outputs are in memory.
+- **History PDF works from stored strings.** `HistoryEntry` now stores
+  `outputs`/`warnings`/`formulaLines` (resolved at save time, in the language
+  and units system active then) next to `fields`/`result`, all built by
+  `buildCalculationSnapshot` (`state/buildCalculationSnapshot.ts`) — the one
+  shared path for history saving and PDF. Entries saved before this lack
+  those fields: their PDF falls back to `[result]` with no warnings/formula,
+  and old `ohms_law` calculations were never saved at all (no
+  `role:'output'` field existed to key on).
 - `MenuScreen`'s `ui.menu.exportPdf` row is still a disabled `ComingSoonRow`
   by design — kept as non-Pro marketing surface rather than wired to
   anything, since it has no single calculator's result to export.

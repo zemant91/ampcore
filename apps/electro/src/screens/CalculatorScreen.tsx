@@ -12,6 +12,7 @@ import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
 import { decimalSeparatorFor } from '../i18n/i18n';
 import { getUnitsSystem } from '../lib/settings';
+import { buildCalculationSnapshot } from '../state/buildCalculationSnapshot';
 import { useCalculatorState } from '../state/useCalculatorState';
 import { buildFeedbackMailtoUrl } from '../feedback/buildFeedbackMailto';
 import { useEntitlement } from '../subscriptions';
@@ -75,9 +76,15 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
 
     setGeneratingPdf(true);
     generatePdfReport({
-      calculator,
-      values,
-      outputs,
+      calculatorTitle: t(calculator.titleKey),
+      snapshot: buildCalculationSnapshot({
+        calculator,
+        values,
+        outputs,
+        warnings,
+        resolveLabel: t,
+        unitsSystem: getUnitsSystem(electro.defaultUnitsSystem),
+      }),
       resolveLabel: t,
       language: i18n.language,
       brandName: electro.displayName,
@@ -89,7 +96,7 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
       .finally(() => {
         setGeneratingPdf(false);
       });
-  }, [calculator, generatingPdf, isPro, navigation, outputs, values, t, i18n.language]);
+  }, [calculator, generatingPdf, isPro, navigation, outputs, values, warnings, t, i18n.language]);
 
   if (!calculator) return null;
 

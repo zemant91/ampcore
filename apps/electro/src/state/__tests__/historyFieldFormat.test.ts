@@ -1,5 +1,5 @@
 import type { FieldDef } from '@calc/engine';
-import { formatFieldForHistory } from '../useCalculatorState';
+import { formatFieldForHistory } from '../buildCalculationSnapshot';
 
 const dict: Record<string, string> = {
   'field.system': 'System',

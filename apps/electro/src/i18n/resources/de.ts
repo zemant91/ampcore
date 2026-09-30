@@ -195,6 +195,8 @@ export const de: Record<string, string> = {
   'pdf.inputsHeading': 'Eingaben',
   'pdf.outputsHeading': 'Ergebnisse',
   'pdf.generatedOn': 'Erstellt am',
+  'pdf.warningsHeading': 'Hinweise',
+  'pdf.calculatedOn': 'Berechnet am',
   'pdf.errorTitle': 'PDF konnte nicht erstellt werden',
   'pdf.errorBody': 'Bitte versuche es erneut.',
 

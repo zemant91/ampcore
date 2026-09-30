@@ -1,15 +1,14 @@
 import { Platform } from 'react-native';
 import { generatePDF } from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
-import type { CalculatorDef, Values } from '@calc/engine';
-import { buildFieldCardStates } from '@calc/ui';
-import { formatFieldForHistory } from '../state/useCalculatorState';
+import type { CalculationSnapshot } from '../state/buildCalculationSnapshot';
 import { buildReportHtml } from './buildReportHtml';
 
 export interface GeneratePdfReportParams {
-  calculator: CalculatorDef;
-  values: Values;
-  outputs: Values;
+  calculatorTitle: string;
+  snapshot: CalculationSnapshot;
+  /** When the calculation was done (history entries) — defaults to now */
+  calculatedAt?: number;
   resolveLabel: (key: string) => string;
   language: string;
   brandName: string;
@@ -24,55 +23,35 @@ function slugify(title: string): string {
 /**
  * Builds the report HTML, converts it to a PDF (react-native-html-to-pdf,
  * offline WebView render — no network/remote resources involved) and hands
- * it to the system share sheet. Caller (CalculatorScreen) is responsible for
- * the Pro gate — this assumes the caller already decided the user is
- * entitled to generate a report.
+ * it to the system share sheet. Caller is responsible for the Pro gate —
+ * this assumes the caller already decided the user is entitled to generate
+ * a report. Takes a pre-built snapshot so the live calculator screen and
+ * History entries share one path.
  */
 export async function generatePdfReport({
-  calculator,
-  values,
-  outputs,
+  calculatorTitle,
+  snapshot,
+  calculatedAt,
   resolveLabel,
   language,
   brandName,
   disclaimerKey,
 }: GeneratePdfReportParams): Promise<void> {
-  const mergedValues: Values = { ...values, ...outputs };
-
-  // Static field.role isn't enough on its own — ohms_law marks all 4 of
-  // voltage/current/resistance/power as role: 'input' and relies on the UI
-  // layer to diff rawInputs vs outputs to see which 2 were actually typed
-  // vs computed (see ohmsLaw.calculator.ts's docstring). buildFieldCardStates
-  // is that same diffing logic already used by CalculatorForm — reusing it
-  // here instead of re-deriving from role keeps this correct for that
-  // calculator too, not just the ones with static roles.
-  const fieldStates = buildFieldCardStates(calculator.fields, values, outputs);
-
-  const inputs = calculator.fields
-    .filter((field) => fieldStates[field.id] === 'given')
-    .map((field) => formatFieldForHistory(field, mergedValues, resolveLabel));
-
-  const reportOutputs = calculator.fields
-    .filter((field) => fieldStates[field.id] === 'calculated')
-    .map((field) => formatFieldForHistory(field, mergedValues, resolveLabel));
-
-  const formattedDate = new Intl.DateTimeFormat(language, { dateStyle: 'medium', timeStyle: 'short' }).format(
-    new Date(),
-  );
+  const format = (ts: number) =>
+    new Intl.DateTimeFormat(language, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(ts));
 
   const html = buildReportHtml({
     brandName,
-    calculatorTitle: resolveLabel(calculator.titleKey),
-    formulaLines: calculator.formulaKeys?.(values).map(resolveLabel) ?? [],
-    inputs,
-    outputs: reportOutputs,
+    calculatorTitle,
+    ...snapshot,
     inputsHeading: resolveLabel('pdf.inputsHeading'),
     outputsHeading: resolveLabel('pdf.outputsHeading'),
-    generatedOnLabel: `${resolveLabel('pdf.generatedOn')} ${formattedDate}`,
+    warningsHeading: resolveLabel('pdf.warningsHeading'),
+    generatedOnLabel: `${resolveLabel(calculatedAt ? 'pdf.calculatedOn' : 'pdf.generatedOn')} ${format(calculatedAt ?? Date.now())}`,
     disclaimer: resolveLabel(disclaimerKey),
   });
 
-  const fileName = `${slugify(resolveLabel(calculator.titleKey))}-${Date.now()}`;
+  const fileName = `${slugify(calculatorTitle)}-${Date.now()}`;
 
   // iOS: the module's default (no `directory`) writes to NSTemporaryDirectory(),
   // which the share sheet's out-of-process extensions (Quick Look preview,

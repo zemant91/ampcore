@@ -1,8 +1,12 @@
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 
-/** Must match the entitlement identifier configured in the RevenueCat dashboard exactly. */
-export const PRO_ENTITLEMENT_ID = 'AmpCore Pro';
+/**
+ * Must match the entitlement identifier configured in the RevenueCat dashboard
+ * exactly — that identifier is "pro" (the "AmpCore Pro" name is only its
+ * Description field in the dashboard, not the identifier the SDK matches on).
+ */
+export const PRO_ENTITLEMENT_ID = 'pro';
 
 /**
  * RevenueCat public SDK keys aren't secret by design (like a Stripe

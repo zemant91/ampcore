@@ -6,8 +6,10 @@ export interface ReportData {
   formulaLines: string[];
   inputs: HistoryField[];
   outputs: HistoryField[];
+  warnings: string[];
   inputsHeading: string;
   outputsHeading: string;
+  warningsHeading: string;
   generatedOnLabel: string;
   disclaimer: string;
 }
@@ -47,6 +49,12 @@ export function buildReportHtml(data: ReportData): string {
       ? `<div class="formula">${data.formulaLines.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}</div>`
       : '';
 
+  const warningsBlock =
+    data.warnings.length > 0
+      ? `<h2>${escapeHtml(data.warningsHeading)}</h2>
+    <div class="warnings">${data.warnings.map((w) => `<div>&#9888; ${escapeHtml(w)}</div>`).join('')}</div>`
+      : '';
+
   return `<!DOCTYPE html>
 <html>
   <head>
@@ -66,6 +74,8 @@ export function buildReportHtml(data: ReportData): string {
       td.value { text-align: right; font-weight: 600; }
       .unit { font-weight: 400; color: #888; }
       .formula { font-family: 'Courier New', monospace; font-size: 15px; background: #f6f5f0; border-radius: 8px; padding: 12px 16px; margin: 8px 0 20px; }
+      .warnings { background: #fff4e5; border-left: 3px solid #e08a00; border-radius: 4px; padding: 10px 14px; font-size: 13px; line-height: 1.6; color: #6b4200; }
+      .results td { font-size: 16px; }
       .disclaimer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #eee; font-size: 10px; line-height: 1.5; color: #888; }
     </style>
   </head>
@@ -79,7 +89,9 @@ export function buildReportHtml(data: ReportData): string {
     <table>${renderFieldRows(data.inputs)}</table>
 
     <h2>${escapeHtml(data.outputsHeading)}</h2>
-    <table>${renderFieldRows(data.outputs)}</table>
+    <table class="results">${renderFieldRows(data.outputs)}</table>
+
+    ${warningsBlock}
 
     <p class="disclaimer">${escapeHtml(data.disclaimer)}</p>
   </body>

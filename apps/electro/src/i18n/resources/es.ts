@@ -194,6 +194,8 @@ export const es: Record<string, string> = {
   'pdf.inputsHeading': 'Datos introducidos',
   'pdf.outputsHeading': 'Resultados',
   'pdf.generatedOn': 'Generado el',
+  'pdf.warningsHeading': 'Advertencias',
+  'pdf.calculatedOn': 'Calculado el',
   'pdf.errorTitle': 'No se pudo crear el PDF',
   'pdf.errorBody': 'Inténtalo de nuevo.',
 

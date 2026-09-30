@@ -37,7 +37,14 @@ export function PaywallScreen({ navigation }: Props): ReactElement {
 
   useEffect(() => {
     if (isPro) return;
-    fetchPaywallOffering(__DEV__ ? getDevOfferingId() : null).then(setOffering);
+    // Must not leave `offering` stuck at undefined on rejection — that would
+    // keep the Paywall unrendered forever with nothing on screen to explain
+    // why (no native error, since RevenueCatUI.Paywall itself never mounts).
+    // Falling back to null still renders it (with no forced offering), so
+    // RevenueCat's own fetch/error handling takes over from there.
+    fetchPaywallOffering(__DEV__ ? getDevOfferingId() : null)
+      .then(setOffering)
+      .catch(() => setOffering(null));
   }, [isPro]);
 
   if (isPro) {
