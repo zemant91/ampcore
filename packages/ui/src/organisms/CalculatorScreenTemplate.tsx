@@ -31,6 +31,11 @@ export interface CalculatorScreenTemplateProps {
   /** Header icon button for generating a PDF report — only rendered once outputs exist (see onChainTo's same condition below); omit to render no button at all */
   onGeneratePdf?: () => void;
   generatePdfIcon?: ReactNode;
+  /** Secondary button under the chainTo buttons (e.g. "Save to project") — only rendered once outputs exist; omit to render none. `saveToProjectLabel` is already resolved. */
+  onSaveToProject?: () => void;
+  saveToProjectLabel?: string;
+  /** The current inputs are already saved — the button switches from outlined to filled with a check mark */
+  saveToProjectDone?: boolean;
 }
 
 function warningColor(key: WarningKey, theme: ThemeTokens): string {
@@ -68,6 +73,9 @@ export function CalculatorScreenTemplate({
   reportIssueIcon,
   onGeneratePdf,
   generatePdfIcon,
+  onSaveToProject,
+  saveToProjectLabel,
+  saveToProjectDone = false,
 }: CalculatorScreenTemplateProps): ReactElement {
   const iconButtonStyle = {
     width: 36,
@@ -175,7 +183,7 @@ export function CalculatorScreenTemplate({
                   borderRadius: theme.layout.cardRadius,
                   backgroundColor: theme.accent,
                 }}
-                onPress={() => onChainTo?.(chain.calculatorId, chain.mapOutputs(outputs))}
+                onPress={() => onChainTo?.(chain.calculatorId, chain.mapOutputs(outputs, values))}
                 testID={`calculator-screen-chain-to-${chain.calculatorId}`}
               >
                 <Text style={{ fontWeight: '700', color: theme.colors.background }}>
@@ -184,6 +192,26 @@ export function CalculatorScreenTemplate({
               </Pressable>
             ))}
           </View>
+        )}
+
+        {outputs !== undefined && onSaveToProject !== undefined && saveToProjectLabel !== undefined && (
+          <Pressable
+            style={{
+              alignItems: 'center',
+              padding: theme.layout.spacingUnit * 1.5,
+              borderRadius: theme.layout.cardRadius,
+              borderWidth: 1,
+              borderColor: theme.accent,
+              backgroundColor: saveToProjectDone ? theme.accent : 'transparent',
+            }}
+            onPress={onSaveToProject}
+            testID="calculator-screen-save-to-project"
+          >
+            <Text style={{ fontWeight: '700', color: saveToProjectDone ? theme.colors.background : theme.accent }}>
+              {saveToProjectDone ? '✓ ' : ''}
+              {saveToProjectLabel}
+            </Text>
+          </Pressable>
         )}
       </ScrollView>
 

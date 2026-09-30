@@ -10,11 +10,10 @@ visible once a calculation has a result — generates a one-page PDF report
 (calculator title, formula, inputs, all results, warnings, brand name,
 date, the app's legal disclaimer) and hands it to the system share sheet.
 
-This was already promised to users before it existed: `paywall.pdfExport`
-in the paywall's value props, and a disabled `ComingSoonRow` in `MenuScreen`
-for `ui.menu.exportPdf`. This feature implements the calculator-screen path;
-the `MenuScreen` row is intentionally left as a "coming soon" placeholder
-(see Limitations below).
+This was already promised to users before it existed (`paywall.pdfExport` in the
+paywall's value props). A disabled "Export to PDF" `ComingSoonRow` in `MenuScreen`
+was removed: PDF export lives on the calculator screen, in History, and (for a
+whole project) on the project screen — see [projects.md](projects.md).
 
 ## Key files
 
@@ -71,6 +70,3 @@ the `MenuScreen` row is intentionally left as a "coming soon" placeholder
   those fields: their PDF falls back to `[result]` with no warnings/formula,
   and old `ohms_law` calculations were never saved at all (no
   `role:'output'` field existed to key on).
-- `MenuScreen`'s `ui.menu.exportPdf` row is still a disabled `ComingSoonRow`
-  by design — kept as non-Pro marketing surface rather than wired to
-  anything, since it has no single calculator's result to export.

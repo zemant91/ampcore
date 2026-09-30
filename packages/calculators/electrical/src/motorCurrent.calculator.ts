@@ -71,6 +71,16 @@ export const motorCurrent: CalculatorDef<MotorCurrentInputs, MotorCurrentOutputs
   references: ['IEC 60034'],
   chainTo: [
     {
+      calculatorId: 'cable_sizing',
+      labelKey: 'calc.cableSizing.title',
+      mapOutputs: (outputs, inputs) => ({
+        system: inputs.system,
+        loadType: 'current',
+        current: outputs.current,
+        voltage: inputs.voltage,
+      }),
+    },
+    {
       calculatorId: 'breaker_selection',
       labelKey: 'chainTo.breakerSelection',
       mapOutputs: (outputs) => ({ designCurrent: outputs.current }),

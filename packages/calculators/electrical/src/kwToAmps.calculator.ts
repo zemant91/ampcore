@@ -47,4 +47,16 @@ export const kwToAmps: CalculatorDef<KwToAmpsInputs, KwToAmpsOutputs> = {
     return hasNonFinite ? ['warn.divisionByZero'] : [];
   },
   references: ["Ohm's law / power triangle"],
+  chainTo: [
+    {
+      calculatorId: 'cable_sizing',
+      labelKey: 'calc.cableSizing.title',
+      mapOutputs: (outputs, inputs) => ({
+        system: inputs.system,
+        loadType: 'current',
+        current: outputs.current,
+        voltage: inputs.voltage,
+      }),
+    },
+  ],
 };

@@ -110,7 +110,8 @@ export interface CalculatorDef<
   chainTo?: {
     calculatorId: string;
     labelKey: string;
-    mapOutputs(outputs: TOutputs): Partial<Values>;
+    /** `inputs` too, for values that are only ever typed (system, voltage, ...) and never appear among the outputs */
+    mapOutputs(outputs: TOutputs, inputs: TInputs): Partial<Values>;
   }[];
   /**
    * Field ids among which compute() solves for any 2 of N (currently only

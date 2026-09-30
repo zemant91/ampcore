@@ -5,6 +5,8 @@ import type { RootStackParamList } from './types';
 import { HomeScreen } from '../screens/HomeScreen';
 import { CalculatorScreen } from '../screens/CalculatorScreen';
 import { HistoryScreen } from '../screens/HistoryScreen';
+import { ProjectsScreen } from '../screens/ProjectsScreen';
+import { ProjectScreen } from '../screens/ProjectScreen';
 import { PaywallScreen } from '../screens/PaywallScreen';
 import { MenuScreen } from '../screens/MenuScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
@@ -24,6 +26,8 @@ export function RootNavigator(): ReactElement {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Calculator" component={CalculatorScreen} />
         <Stack.Screen name="History" component={HistoryScreen} />
+        <Stack.Screen name="Projects" component={ProjectsScreen} />
+        <Stack.Screen name="Project" component={ProjectScreen} />
         <Stack.Screen name="Paywall" component={PaywallScreen} />
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />

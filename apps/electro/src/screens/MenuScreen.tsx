@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { Alert, Linking, Platform, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { History as HistoryIcon, FileText, Lock, Languages, Mail } from 'lucide-react-native';
+import { History as HistoryIcon, FolderOpen, Lock, Languages, Mail } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -10,7 +10,7 @@ import { buildTheme } from '@calc/ui';
 import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
 import { buildFeedbackMailtoUrl } from '../feedback/buildFeedbackMailto';
-import { presentCustomerCenter } from '../subscriptions';
+import { presentCustomerCenter, useEntitlement } from '../subscriptions';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Menu'>;
 
@@ -44,39 +44,6 @@ const rowIconBoxStyle = {
   backgroundColor: `${theme.accent}20`,
 };
 
-/** A row for a feature that isn't built yet — same muted/dashed treatment as "soon" calculators on Home */
-function ComingSoonRow({ icon, label }: { icon: ReactElement; label: string }): ReactElement {
-  const { t } = useTranslation();
-  return (
-    <View
-      style={{
-        ...rowStyle,
-        backgroundColor: 'transparent',
-        borderWidth: 1,
-        borderStyle: 'dashed',
-        borderColor: theme.colors.cardBorderMuted,
-      }}
-    >
-      <View style={{ ...rowIconBoxStyle, backgroundColor: theme.colors.cardBorderMuted }}>{icon}</View>
-      <Text style={{ flex: 1, fontFamily: theme.typography.uiFontFamily, fontSize: 15, color: theme.colors.textSecondary }}>
-        {label}
-      </Text>
-      <View
-        style={{
-          paddingHorizontal: theme.layout.spacingUnit,
-          paddingVertical: 4,
-          borderRadius: 6,
-          backgroundColor: theme.colors.cardBorderMuted,
-        }}
-      >
-        <Text style={{ fontSize: 10, fontWeight: '700', color: theme.colors.textSecondary }}>
-          {t('ui.common.soonBadge')}
-        </Text>
-      </View>
-    </View>
-  );
-}
-
 /**
  * Everything that isn't a calculator: history, and future account/export
  * features. Kept as its own screen (not a Home bottom sheet) for the same
@@ -85,6 +52,7 @@ function ComingSoonRow({ icon, label }: { icon: ReactElement; label: string }): 
  */
 export function MenuScreen({ navigation }: Props): ReactElement {
   const { t } = useTranslation();
+  const { isPro } = useEntitlement();
   const [opening, setOpening] = useState(false);
 
   async function handleManageSubscription(): Promise<void> {
@@ -134,6 +102,19 @@ export function MenuScreen({ navigation }: Props): ReactElement {
           </Text>
         </Pressable>
 
+        <Pressable
+          style={rowStyle}
+          onPress={() => navigation.navigate(isPro ? 'Projects' : 'Paywall')}
+          testID="menu-projects"
+        >
+          <View style={rowIconBoxStyle}>
+            <FolderOpen size={18} color={theme.accent} />
+          </View>
+          <Text style={{ flex: 1, fontFamily: theme.typography.uiFontFamily, fontSize: 15, color: theme.colors.textPrimary }}>
+            {t('ui.projects.title')}
+          </Text>
+        </Pressable>
+
         <Pressable style={rowStyle} onPress={() => navigation.navigate('Settings')} testID="menu-settings">
           <View style={rowIconBoxStyle}>
             <Languages size={18} color={theme.accent} />
@@ -164,8 +145,6 @@ export function MenuScreen({ navigation }: Props): ReactElement {
             {t('ui.menu.feedback')}
           </Text>
         </Pressable>
-
-        <ComingSoonRow icon={<FileText size={18} color={theme.colors.textSecondary} />} label={t('ui.menu.exportPdf')} />
 
         <Pressable style={rowStyle} onPress={handleManageSubscription} disabled={opening} testID="menu-manage-subscription">
           <View style={rowIconBoxStyle}>

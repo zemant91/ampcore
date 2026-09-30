@@ -12,11 +12,13 @@ import type { RootStackParamList } from '../navigation/types';
 import { electro } from '../brand';
 import { decimalSeparatorFor } from '../i18n/i18n';
 import { getUnitsSystem } from '../lib/settings';
+import { createProject, loadProjects, saveStep } from '../lib/projects';
 import { buildCalculationSnapshot } from '../state/buildCalculationSnapshot';
 import { useCalculatorState } from '../state/useCalculatorState';
 import { buildFeedbackMailtoUrl } from '../feedback/buildFeedbackMailto';
 import { useEntitlement } from '../subscriptions';
 import { generatePdfReport } from '../pdf/generatePdfReport';
+import { ProjectPickerModal } from './ProjectPicker';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Calculator'>;
 
@@ -33,7 +35,8 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
   const { t, i18n } = useTranslation();
   const { isPro } = useEntitlement();
   const [generatingPdf, setGeneratingPdf] = useState(false);
-  const { calculatorId, initialValues } = route.params;
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const { calculatorId, initialValues, projectId, stepId } = route.params;
   const calculator = electro.calculators.find((c) => c.id === calculatorId);
 
   // The hook must be called in the same order on every render — the fallback
@@ -45,11 +48,89 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
     initialValues,
   );
 
+  // Inputs as of the last save into a project (a step opened from a project starts out saved) —
+  // the button reads "Saved" while they still match, "Save" once edited.
+  const [savedKey, setSavedKey] = useState<string | null>(stepId ? JSON.stringify(initialValues ?? {}) : null);
+
+  const isSaved = projectId !== undefined && savedKey === JSON.stringify(values);
+
+  /** Writes the current calculation into `targetProjectId` (overwriting this screen's step if it already has one) and binds the screen to it. */
+  const saveToProject = useCallback(
+    (targetProjectId: string): boolean => {
+      if (!calculator || outputs === undefined) return false;
+      const id = saveStep(
+        targetProjectId,
+        {
+          calculatorId: calculator.id,
+          calculatorName: t(calculator.titleKey),
+          timestamp: Date.now(),
+          values,
+          snapshot: buildCalculationSnapshot({
+            calculator,
+            values,
+            outputs,
+            warnings,
+            resolveLabel: t,
+            unitsSystem: getUnitsSystem(electro.defaultUnitsSystem),
+          }),
+        },
+        targetProjectId === projectId ? stepId : undefined,
+      );
+      if (id === undefined) {
+        Alert.alert(t('ui.projects.saveError'));
+        return false;
+      }
+      navigation.setParams({ projectId: targetProjectId, stepId: id });
+      setSavedKey(JSON.stringify(values));
+      return true;
+    },
+    [calculator, navigation, outputs, projectId, stepId, t, values, warnings],
+  );
+
+  const onSaveToProject = useCallback(() => {
+    if (!isPro) {
+      navigation.navigate('Paywall');
+      return;
+    }
+    if (projectId) saveToProject(projectId);
+    else setPickerOpen(true);
+  }, [isPro, navigation, projectId, saveToProject]);
+
+  const onPickProject = useCallback(
+    (targetProjectId: string) => {
+      if (saveToProject(targetProjectId)) setPickerOpen(false);
+    },
+    [saveToProject],
+  );
+
+  const onCreateProject = useCallback(
+    (name: string) => {
+      const project = createProject(name);
+      if (!project) {
+        Alert.alert(t('ui.projects.limitReached'));
+        return;
+      }
+      onPickProject(project.id);
+    },
+    [onPickProject, t],
+  );
+
   const onChainTo = useCallback(
     (targetId: string, mappedValues: Partial<Values>) => {
-      navigation.push('Calculator', { calculatorId: targetId, initialValues: mappedValues });
+      // Pro calculators are locked on Home only — a chain from a free one must not bypass that.
+      if (!isPro && electro.calculators.find((c) => c.id === targetId)?.tier === 'pro') {
+        navigation.navigate('Paywall');
+        return;
+      }
+      // In a project the chain is part of it: record this step first, and keep the next calculator bound.
+      if (projectId) saveToProject(projectId);
+      navigation.push('Calculator', {
+        calculatorId: targetId,
+        initialValues: mappedValues,
+        ...(projectId ? { projectId } : {}),
+      });
     },
-    [navigation],
+    [isPro, navigation, projectId, saveToProject],
   );
 
   const onReportIssue = useCallback(() => {
@@ -124,6 +205,18 @@ export function CalculatorScreen({ route, navigation }: Props): ReactElement | n
         reportIssueIcon={<Flag size={16} color={theme.colors.textSecondary} />}
         onGeneratePdf={onGeneratePdf}
         generatePdfIcon={<FileText size={16} color={theme.colors.textSecondary} />}
+        onSaveToProject={onSaveToProject}
+        saveToProjectLabel={t(
+          !projectId ? 'ui.projects.addToProject' : isSaved ? 'ui.projects.saved' : 'ui.projects.saveToProject',
+        )}
+        saveToProjectDone={isSaved}
+      />
+      <ProjectPickerModal
+        visible={pickerOpen}
+        projects={pickerOpen ? loadProjects() : []}
+        onPick={onPickProject}
+        onCreate={onCreateProject}
+        onClose={() => setPickerOpen(false)}
       />
     </SafeAreaView>
   );

@@ -135,56 +135,54 @@ describe('CalculatorDef cableSizing: engine integration', () => {
 
   test('warnings(): no fitting cross-section -> warning', () => {
     const inputs = {
-      system: 'dc' as const,
-      loadType: 'current' as const,
-      current: 10000,
+    system: 'dc' as const,
+    loadType: 'current' as const,
+    current: 10000,
+    voltage: 400,
+    material: 'Cu' as const,
+    insulation: 'PVC' as const,
+    installMethod: 'A1' as const,
+    ambientTemp: 30 as const,
+    grouping: '1' as const,
+  };
+  const out = cableSizing.compute(inputs, data);
+  expect(cableSizing.warnings!(inputs, out)).toContain('warn.cableSizingNoTableFit');
+});
+
+test('warnings(): ΔU% above 5% with length given -> IEC warning', () => {
+  const inputs = {
+    system: '1ph' as const,
+    loadType: 'current' as const,
+    current: 20,
+    voltage: 230,
+    material: 'Cu' as const,
+    insulation: 'PVC' as const,
+    installMethod: 'A1' as const,
+    ambientTemp: 30 as const,
+    grouping: '1' as const,
+    length: 500,
+  };
+  const out = cableSizing.compute(inputs, data);
+  expect(out.voltageDropPercent).toBeGreaterThan(5);
+  expect(cableSizing.warnings!(inputs, out)).toContain('warn.voltageDropExceedsIec');
+});
+
+test('chainTo -> breaker_selection maps designCurrent/tableAmpacity to Ip/Iz', () => {
+  const inputs = {
+      system: '3ph',
+      loadType: 'power',
+      power: 15000,
       voltage: 400,
-      material: 'Cu' as const,
-      insulation: 'PVC' as const,
-      installMethod: 'A1' as const,
-      ambientTemp: 30 as const,
-      grouping: '1' as const,
-    };
-    const out = cableSizing.compute(inputs, data);
-    expect(cableSizing.warnings!(inputs, out)).toContain('warn.cableSizingNoTableFit');
-  });
-
-  test('warnings(): ΔU% above 5% with length given -> IEC warning', () => {
-    const inputs = {
-      system: '1ph' as const,
-      loadType: 'current' as const,
-      current: 20,
-      voltage: 230,
-      material: 'Cu' as const,
-      insulation: 'PVC' as const,
-      installMethod: 'A1' as const,
-      ambientTemp: 30 as const,
-      grouping: '1' as const,
-      length: 500,
-    };
-    const out = cableSizing.compute(inputs, data);
-    expect(out.voltageDropPercent).toBeGreaterThan(5);
-    expect(cableSizing.warnings!(inputs, out)).toContain('warn.voltageDropExceedsIec');
-  });
-
-  test('chainTo -> breaker_selection maps designCurrent/tableAmpacity to Ip/Iz', () => {
-    const outputs = cableSizing.compute(
-      {
-        system: '3ph',
-        loadType: 'power',
-        power: 15000,
-        voltage: 400,
-        cosPhi: 0.9,
-        material: 'Cu',
-        insulation: 'PVC',
-        installMethod: 'C',
-        ambientTemp: 30,
-        grouping: '1',
-      },
-      data,
-    );
+      cosPhi: 0.9,
+      material: 'Cu',
+      insulation: 'PVC',
+      installMethod: 'C',
+      ambientTemp: 30,
+      grouping: '1',
+    } as const;
+    const outputs = cableSizing.compute(inputs, data);
     const chain = cableSizing.chainTo!.find((c) => c.calculatorId === 'breaker_selection')!;
-    expect(chain.mapOutputs(outputs)).toEqual({
+    expect(chain.mapOutputs(outputs, inputs)).toEqual({
       designCurrent: outputs.designCurrent,
       cableAmpacity: outputs.tableAmpacity,
     });

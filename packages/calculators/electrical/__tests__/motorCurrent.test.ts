@@ -29,9 +29,10 @@ describe('CalculatorDef motorCurrent: engine integration', () => {
   });
 
   test('chainTo -> breaker_selection maps the nominal current to designCurrent (Ip)', () => {
-    const outputs = solveMotorCurrent({ system: '3ph', power: 7500, voltage: 400, efficiency: 0.88, cosPhi: 0.84 });
+    const inputs = { system: '3ph' as const, power: 7500, voltage: 400, efficiency: 0.88, cosPhi: 0.84 };
+    const outputs = solveMotorCurrent(inputs);
     const chain = motorCurrent.chainTo!.find((c) => c.calculatorId === 'breaker_selection')!;
-    expect(chain.mapOutputs(outputs)).toEqual({ designCurrent: outputs.current });
+    expect(chain.mapOutputs(outputs, inputs)).toEqual({ designCurrent: outputs.current });
   });
 
   test('warnings(): division by zero at U=0 -> warning', () => {

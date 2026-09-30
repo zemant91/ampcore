@@ -2,7 +2,8 @@ import { Platform } from 'react-native';
 import { generatePDF } from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
 import type { CalculationSnapshot } from '../state/buildCalculationSnapshot';
-import { buildReportHtml } from './buildReportHtml';
+import type { Project } from '../lib/projects';
+import { buildProjectReportHtml, buildReportHtml } from './buildReportHtml';
 
 export interface GeneratePdfReportParams {
   calculatorTitle: string;
@@ -51,7 +52,11 @@ export async function generatePdfReport({
     disclaimer: resolveLabel(disclaimerKey),
   });
 
-  const fileName = `${slugify(calculatorTitle)}-${Date.now()}`;
+  await sharePdf(html, calculatorTitle);
+}
+
+async function sharePdf(html: string, title: string): Promise<void> {
+  const fileName = `${slugify(title)}-${Date.now()}`;
 
   // iOS: the module's default (no `directory`) writes to NSTemporaryDirectory(),
   // which the share sheet's out-of-process extensions (Quick Look preview,
@@ -76,4 +81,41 @@ export async function generatePdfReport({
     // A user backing out of the share sheet isn't an error worth surfacing.
     failOnCancel: false,
   });
+}
+
+export interface GenerateProjectPdfReportParams {
+  project: Project;
+  resolveLabel: (key: string) => string;
+  language: string;
+  brandName: string;
+  disclaimerKey: string;
+}
+
+/** Same pipeline as generatePdfReport, for a whole project. The caller owns the Pro gate. */
+export async function generateProjectPdfReport({
+  project,
+  resolveLabel,
+  language,
+  brandName,
+  disclaimerKey,
+}: GenerateProjectPdfReportParams): Promise<void> {
+  const format = (ts: number) =>
+    new Intl.DateTimeFormat(language, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(ts));
+
+  const html = buildProjectReportHtml({
+    brandName,
+    projectName: project.name,
+    steps: project.steps.map((step) => ({
+      title: step.calculatorName,
+      dateLabel: `${resolveLabel('pdf.calculatedOn')} ${format(step.timestamp)}`,
+      ...step.snapshot,
+    })),
+    inputsHeading: resolveLabel('pdf.inputsHeading'),
+    outputsHeading: resolveLabel('pdf.outputsHeading'),
+    warningsHeading: resolveLabel('pdf.warningsHeading'),
+    generatedOnLabel: `${resolveLabel('pdf.generatedOn')} ${format(Date.now())}`,
+    disclaimer: resolveLabel(disclaimerKey),
+  });
+
+  await sharePdf(html, project.name);
 }

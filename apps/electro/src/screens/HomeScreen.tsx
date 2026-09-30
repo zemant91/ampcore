@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search, Lock, Settings } from 'lucide-react-native';
+import { Search, Lock, Settings, FolderOpen, Plus } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { buildTheme } from '@calc/ui';
@@ -195,6 +195,37 @@ export function HomeScreen({ navigation }: Props): ReactElement {
           testID="home-search-input"
         />
       </View>
+      {!isSearching && (
+        <Pressable
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: theme.layout.spacingUnit * 1.5,
+            marginHorizontal: theme.layout.spacingUnit * 2,
+            marginBottom: theme.layout.spacingUnit * 2,
+            padding: theme.layout.spacingUnit * 1.5,
+            borderRadius: theme.layout.cardRadius,
+            borderWidth: 1,
+            borderColor: theme.accent,
+          }}
+          onPress={() => (isPro ? navigation.navigate('Projects', { focusNew: true }) : navigation.navigate('Paywall'))}
+          testID="home-projects-card"
+        >
+          <FolderOpen size={20} color={theme.accent} />
+          <Text
+            style={{
+              flex: 1,
+              color: theme.colors.textPrimary,
+              fontFamily: theme.typography.uiFontFamily,
+              fontSize: 16,
+              fontWeight: '700',
+            }}
+          >
+            {t('ui.projects.title')}
+          </Text>
+          {isPro ? <Plus size={20} color={theme.accent} /> : <Lock size={14} color={theme.colors.textSecondary} />}
+        </Pressable>
+      )}
       <FlatList
         data={visibleSections}
         keyExtractor={(section) => section.category}

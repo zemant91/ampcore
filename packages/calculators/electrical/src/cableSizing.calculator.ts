@@ -198,6 +198,20 @@ export const cableSizing: CalculatorDef<CableSizingInputs, CableSizingOutputs> =
   references: ['IEC 60364-5-52'],
   chainTo: [
     {
+      calculatorId: 'voltage_drop',
+      labelKey: 'calc.voltageDrop.title',
+      mapOutputs: (outputs, inputs) => ({
+        system: inputs.system,
+        material: inputs.material,
+        // Worst case: conductor at its insulation's max operating temperature (PVC 70 °C, XLPE 90 °C)
+        temperature: inputs.insulation === 'XLPE' ? 90 : 70,
+        voltage: inputs.voltage,
+        current: outputs.designCurrent,
+        length: inputs.length,
+        area: outputs.crossSection,
+      }),
+    },
+    {
       calculatorId: 'breaker_selection',
       labelKey: 'chainTo.breakerSelection',
       mapOutputs: (outputs) => ({
