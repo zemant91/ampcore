@@ -6,6 +6,8 @@ export type Quantity =
   | 'voltage'
   | 'current'
   | 'power'
+  | 'apparentPower'
+  | 'reactivePower'
   | 'resistance'
   | 'length'
   | 'area'

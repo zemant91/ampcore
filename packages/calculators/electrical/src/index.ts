@@ -29,3 +29,23 @@ export { breakerSelection } from './breakerSelection.calculator';
 export { solveConduitFill } from './conduitFill';
 export type { ConduitFillInputs, ConduitFillOutputs } from './conduitFill';
 export { conduitFill } from './conduitFill.calculator';
+
+export { solvePowerFactor } from './powerFactor';
+export type { PowerFactorInputs, PowerFactorOutputs } from './powerFactor';
+export { powerFactor } from './powerFactor.calculator';
+
+export { solvePfCorrection } from './pfCorrection';
+export type { PfCorrectionInputs, PfCorrectionOutputs } from './pfCorrection';
+export { pfCorrection } from './pfCorrection.calculator';
+
+export { solveTransformerRating } from './transformerRating';
+export type { TransformerRatingInputs, TransformerRatingOutputs } from './transformerRating';
+export { transformerRating } from './transformerRating.calculator';
+
+export { solveShortCircuit, C_MAX_LV } from './shortCircuit';
+export type { ShortCircuitInputs, ShortCircuitOutputs } from './shortCircuit';
+export { shortCircuit } from './shortCircuit.calculator';
+
+export { solveEarthLoop } from './earthLoop';
+export type { EarthLoopInputs, EarthLoopOutputs } from './earthLoop';
+export { earthLoop } from './earthLoop.calculator';

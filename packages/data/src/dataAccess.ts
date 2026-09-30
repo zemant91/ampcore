@@ -1,7 +1,8 @@
 import type { DataAccess } from '@calc/engine';
 import { RESISTIVITY, OPERATING_TEMP_BY_INSULATION } from './tables/resistivity';
 import { SECTIONS, AMPACITY, AMBIENT_CORRECTION, GROUPING_FACTOR, INSTALL_METHOD_LABEL } from './tables/ampacity';
-import { STANDARD_BREAKER_RATINGS, TRIP_CURVES } from './tables/breakers';
+import { STANDARD_BREAKER_RATINGS, TRIP_CURVES, TRIP_MULTIPLE } from './tables/breakers';
+import { STANDARD_TRANSFORMER_KVA } from './tables/transformers';
 import { CONDUIT_SIZES, CABLE_OD_PRESETS_MM, CONDUIT_FILL_LIMIT_PERCENT } from './tables/conduit';
 import { PE_K_FACTORS, STANDARD_PE_SIZES } from './tables/peConductor';
 import { MOTOR_PRESETS } from './tables/motors';
@@ -20,6 +21,7 @@ const KEYED_TABLES: Record<string, Record<string, unknown>> = {
   'ampacity/grouping-factor': GROUPING_FACTOR,
   'ampacity/install-method-label': INSTALL_METHOD_LABEL,
   'conduit/fill-limit-percent': CONDUIT_FILL_LIMIT_PERCENT,
+  'breakers/trip-multiple': TRIP_MULTIPLE,
 };
 
 /**
@@ -35,6 +37,7 @@ const WHOLE_TABLES: Record<string, unknown> = {
   'pe/k-factors': PE_K_FACTORS,
   'pe/standard-sizes': STANDARD_PE_SIZES,
   'motors/presets': MOTOR_PRESETS,
+  'transformers/standard-kva': STANDARD_TRANSFORMER_KVA,
 };
 
 /**

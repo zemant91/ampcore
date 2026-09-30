@@ -24,6 +24,13 @@ describe('units: toBase / fromBase', () => {
     expect(toBase('current', 500, 'mA')).toBeCloseTo(0.5, 6);
   });
 
+  test('kA, kVA, MVA and kvar convert to their base units', () => {
+    expect(toBase('current', 24.5, 'kA')).toBe(24500);
+    expect(toBase('apparentPower', 630, 'kVA')).toBe(630000);
+    expect(toBase('apparentPower', 250, 'MVA')).toBe(250e6);
+    expect(fromBase('reactivePower', 42000, 'kvar')).toBe(42);
+  });
+
   test('unknown unit throws a clear error', () => {
     expect(() => toBase('voltage', 1, 'lightyear')).toThrow(/Unknown unit/);
   });

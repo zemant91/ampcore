@@ -14,3 +14,4 @@ the feature is removed.
 - [features/pdf-export.md](features/pdf-export.md) — Pro-gated PDF report export from a calculator screen
 - [features/dev-pseudo-subscription.md](features/dev-pseudo-subscription.md) — `__DEV__`-only entitlement override for testing Pro-gated features
 - [features/projects.md](features/projects.md) — Pro-gated projects: named sets of saved calculations with a combined PDF
+- [features/new-calculators.md](features/new-calculators.md) — power factor, PF correction, transformer rating, short-circuit, earth fault loop: methods and assumptions

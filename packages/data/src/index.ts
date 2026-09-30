@@ -6,7 +6,8 @@ export type { ConductorMaterial, ConductorTemp, Insulation } from './tables/resi
 export { SECTIONS, AMPACITY, AMBIENT_CORRECTION, GROUPING_FACTOR, INSTALL_METHOD_LABEL } from './tables/ampacity';
 export type { InstallMethod, AmbientTemp, Grouping } from './tables/ampacity';
 
-export { STANDARD_BREAKER_RATINGS, TRIP_CURVES } from './tables/breakers';
+export { STANDARD_BREAKER_RATINGS, TRIP_CURVES, TRIP_MULTIPLE } from './tables/breakers';
+export { STANDARD_TRANSFORMER_KVA } from './tables/transformers';
 export type { TripCurve, TripCurveOption } from './tables/breakers';
 
 export { CONDUIT_SIZES, CABLE_OD_PRESETS_MM, CONDUIT_FILL_LIMIT_PERCENT } from './tables/conduit';

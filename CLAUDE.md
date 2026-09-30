@@ -9,7 +9,8 @@ core: `packages/*` is the domain-agnostic foundation (engine, UI atoms, data
 tables), `apps/*` are the actual React Native apps built on top of it.
 Currently `apps/electro` (brand name **AmpCore**, electrical calculators —
 Ohm's law, cable sizing, voltage drop, conduit fill, motor current, breaker
-selection, PE conductor, kW↔A) is the only real app; `PlumbCalc EU`/`SolarCalc`
+selection, PE conductor, kW↔A, power factor + PF correction, transformer rating,
+short-circuit current, earth fault loop) is the only real app; `PlumbCalc EU`/`SolarCalc`
 are planned future apps on the same foundation (see `README.md`'s "How to
 stand up a new app on this foundation" for the exact recipe).
 

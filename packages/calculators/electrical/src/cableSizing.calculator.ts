@@ -212,6 +212,18 @@ export const cableSizing: CalculatorDef<CableSizingInputs, CableSizingOutputs> =
       }),
     },
     {
+      calculatorId: 'earth_loop',
+      labelKey: 'calc.earthLoop.title',
+      mapOutputs: (outputs, inputs) => ({
+        // U0: phase-to-earth — line voltage / √3 on 3-phase, the supply voltage on 1-phase (DC has no earth loop to check)
+        voltage: inputs.system === '3ph' ? inputs.voltage / Math.sqrt(3) : inputs.system === '1ph' ? inputs.voltage : undefined,
+        material: inputs.material,
+        temperature: inputs.insulation === 'XLPE' ? 90 : 70,
+        length: inputs.length,
+        phaseArea: outputs.crossSection,
+      }),
+    },
+    {
       calculatorId: 'breaker_selection',
       labelKey: 'chainTo.breakerSelection',
       mapOutputs: (outputs) => ({

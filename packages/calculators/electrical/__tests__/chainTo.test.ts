@@ -1,4 +1,14 @@
-import { cableSizing, kwToAmps, motorCurrent, voltageDrop } from '@calc/calculators-electrical';
+import {
+  breakerSelection,
+  cableSizing,
+  earthLoop,
+  kwToAmps,
+  motorCurrent,
+  pfCorrection,
+  powerFactor,
+  transformerRating,
+  voltageDrop,
+} from '@calc/calculators-electrical';
 import type { CalculatorDef, Values } from '@calc/engine';
 import { createDataAccess } from '@calc/data';
 
@@ -52,4 +62,44 @@ test('cable sizing -> voltage drop: chosen section + design current, temperature
     insulation: 'XLPE',
   } as never);
   expect(xlpe.temperature).toBe(90);
+});
+
+test('cable sizing -> earth loop: material, length, section, temperature and U0 (line voltage / √3 on 3-phase)', () => {
+  const inputs = { system: '3ph', loadType: 'current', current: 16, voltage: 400, length: 40, ...cableExtra };
+  const { outputs, mapped, result } = chained(cableSizing, inputs, earthLoop, {
+    peArea: 4,
+    breakerRating: 16,
+    tripCurve: 'C',
+  });
+  expect(mapped).toMatchObject({ material: 'Cu', temperature: 70, length: 40, phaseArea: outputs.crossSection });
+  expect(mapped.voltage).toBeCloseTo(400 / Math.sqrt(3), 6);
+  expect(result.earthLoopImpedance).toBeGreaterThan(0);
+
+  const dc = cableSizing.chainTo!.find((c) => c.calculatorId === 'earth_loop')!.mapOutputs(outputs as never, {
+    ...inputs,
+    system: 'dc',
+  } as never);
+  expect(dc.voltage).toBeUndefined();
+});
+
+test('breaker selection -> earth loop: the chosen rating becomes In', () => {
+  const inputs = { designCurrent: 24, cableAmpacity: 32 };
+  const { mapped } = chained(breakerSelection, inputs, earthLoop, {
+    voltage: 230,
+    material: 'Cu',
+    temperature: 70,
+    length: 20,
+    phaseArea: 2.5,
+    peArea: 2.5,
+    tripCurve: 'C',
+  });
+  expect(mapped).toEqual({ breakerRating: 25 });
+});
+
+test('power factor -> PF correction / transformer rating: P and cosφ carry over', () => {
+  const inputs = { power: 80000, cosPhi: 0.8 };
+  const pfMapped = chained(powerFactor, inputs, pfCorrection, { targetCosPhi: 0.95 });
+  expect(pfMapped.mapped).toMatchObject({ power: 80000, cosPhi: 0.8 });
+  const trafo = chained(powerFactor, inputs, transformerRating, { system: '3ph', primaryVoltage: 20000, secondaryVoltage: 400 });
+  expect(trafo.mapped).toMatchObject({ power: 80000, cosPhi: 0.8 });
 });

@@ -9,6 +9,11 @@ import {
     motorCurrent,
     breakerSelection,
     peConductor,
+    powerFactor,
+    pfCorrection,
+    transformerRating,
+    shortCircuit,
+    earthLoop,
 } from '@calc/calculators-electrical';
 
 export const electro: BrandConfig = {
@@ -24,12 +29,13 @@ export const electro: BrandConfig = {
         motorCurrent,
         breakerSelection,
         peConductor,
+        powerFactor,
+        pfCorrection,
+        transformerRating,
+        shortCircuit,
+        earthLoop,
     ],
-    upcoming: [
-        { id: 'power_factor', titleKey: 'calc.powerFactor.title', descriptionKey: 'calc.powerFactor.desc', category: 'fundamentals', icon: 'pulse' },
-        { id: 'short_circuit', titleKey: 'calc.shortCircuit.title', descriptionKey: 'calc.shortCircuit.desc', category: 'protection-coordination', icon: 'shield' },
-        { id: 'transformer_rating', titleKey: 'calc.transformerRating.title', descriptionKey: 'calc.transformerRating.desc', category: 'protection-coordination', icon: 'transformer' },
-    ],
+    upcoming: [],
     defaultUnitsSystem: 'metric',
     disclosureLevel: 'technical',
     legalDisclaimerKey: 'legal.disclaimer',

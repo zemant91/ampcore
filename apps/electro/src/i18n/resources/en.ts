@@ -15,6 +15,17 @@ export const en: Record<string, string> = {
   'formula.ohmsLaw.3ph1': 'U = I · Z',
   'formula.ohmsLaw.3ph2': 'P = √3·U·I·cosφ',
   'formula.ohmsLaw.3ph3': 'I = P / √3·U·I·cosφ',
+  'formula.powerFactor.1': 'S² = P² + Q²',
+  'formula.powerFactor.2': 'cosφ = P / S',
+  'formula.powerFactor.3': 'Q = P · tanφ',
+  'formula.pfCorrection.1': 'Qc = P · (tanφ₁ − tanφ₂)',
+  'formula.pfCorrection.2': 'S = P / cosφ',
+  'formula.transformer.1': 'S = P / cosφ · (1 + reserve)',
+  'formula.transformer.2': 'I = S / (√3 · U)',
+  'formula.shortCircuit.1': 'Ik″ = c · Un / (√3 · Zk)',
+  'formula.shortCircuit.2': 'ZT = uk · Un² / Sr',
+  'formula.earthLoop.1': 'Zs = Ze + ρ · L · (1/S + 1/Spe)',
+  'formula.earthLoop.2': 'Zs ≤ U0 / Ia',
 
   // "N of 2 filled" hint banner (CalculatorDef.dynamicRoleFieldIds) — built
   // by concatenating resolved fragments, not template interpolation, so
@@ -54,7 +65,11 @@ export const en: Record<string, string> = {
   'calc.shortCircuit.title': 'Short-Circuit Current',
   'calc.shortCircuit.desc': 'Prospective Isc at point of installation',
   'calc.transformerRating.title': 'Transformer Rating',
-  'calc.transformerRating.desc': 'kVA, impedance and load calculations',
+  'calc.transformerRating.desc': 'Standard kVA rating and rated currents',
+  'calc.pfCorrection.title': 'PF Correction',
+  'calc.pfCorrection.desc': 'Capacitor bank kvar to reach a target power factor',
+  'calc.earthLoop.title': 'Earth Fault Loop',
+  'calc.earthLoop.desc': 'Zs and automatic disconnection check — IEC 60364',
 
   // Shared fields
   'field.system': 'System',
@@ -108,6 +123,36 @@ export const en: Record<string, string> = {
   'field.totalCableArea': 'Total cable area',
   'field.conduitFillPercent': 'Fill',
   'field.conduitFillLimit': 'Fill limit',
+
+  // Power factor / compensation / transformer / short-circuit / earth loop
+  'field.reactivePower': 'Reactive power',
+  'field.apparentPower': 'Apparent power',
+  'field.targetCosPhi': 'Target power factor',
+  'field.compensationPower': 'Compensation power',
+  'field.apparentPowerBefore': 'Apparent power before',
+  'field.apparentPowerAfter': 'Apparent power after',
+  'field.currentReduction': 'Current reduction',
+  'field.reservePercent': 'Reserve',
+  'field.primaryVoltage': 'Primary voltage',
+  'field.secondaryVoltage': 'Secondary voltage',
+  'field.requiredApparentPower': 'Required apparent power',
+  'field.ratedApparentPower': 'Standard transformer rating',
+  'field.transformerLoad': 'Load at this rating',
+  'field.primaryCurrent': 'Primary rated current',
+  'field.secondaryCurrent': 'Secondary rated current',
+  'field.transformerPower': 'Transformer rating',
+  'field.ukPercent': 'Short-circuit voltage uk',
+  'field.networkPower': 'Grid short-circuit power',
+  'field.shortCircuitSource': 'Ik″ at transformer',
+  'field.shortCircuitEnd': 'Ik″ at cable end',
+  'field.totalImpedance': 'Impedance at cable end',
+  'field.earthVoltage': 'Phase-to-earth voltage',
+  'field.externalImpedance': 'External loop impedance Ze',
+  'field.peSection': 'PE conductor section',
+  'field.tripCurve': 'Trip curve',
+  'field.loopResistance': 'Conductor loop resistance',
+  'field.earthLoopImpedance': 'Loop impedance Zs',
+  'field.maxLoopImpedance': 'Max. allowed Zs',
 
   // Options: system
   'system.dc': 'DC',
@@ -167,6 +212,10 @@ export const en: Record<string, string> = {
   'peKFactor.Cu_cable': 'Cu, in cable (k=115)',
   'peKFactor.Al_cable': 'Al, in cable (k=76)',
 
+  'tripCurve.B': 'B (3–5 × In)',
+  'tripCurve.C': 'C (5–10 × In)',
+  'tripCurve.D': 'D (10–20 × In)',
+
   // chainTo
   'chainTo.breakerSelection': 'Breaker Selection',
 
@@ -177,6 +226,11 @@ export const en: Record<string, string> = {
     'No standard rating fits between Ip and Iz — increase cable cross-section.',
   'error.noPeSizeFitsInRange':
     'Required PE section exceeds the standard range.',
+  'error.apparentPowerTooSmall': 'Apparent power cannot be smaller than active or reactive power.',
+  'error.cosPhiOutOfRange': 'Power factor must be between 0.01 and 1.',
+  'error.noTransformerFitsInRange': 'Load exceeds the largest standard rating (2500 kVA) — split it across several transformers.',
+  'info.pfAlreadyAtTarget': 'Power factor is already at or above the target — no compensation needed.',
+  'warn.earthLoopTooHigh': 'Loop impedance exceeds the maximum for this breaker — it may not trip instantly. Use a larger conductor, a shorter run or add an RCD.',
   'warn.divisionByZero':
     'Check your inputs — one of the values leads to division by zero.',
   'warn.voltageDropExceedsIec': 'Voltage drop exceeds the 5% IEC guideline.',

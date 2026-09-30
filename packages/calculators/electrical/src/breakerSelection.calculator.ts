@@ -44,4 +44,11 @@ export const breakerSelection: CalculatorDef<BreakerSelectionInputs, BreakerSele
   compute: (inputs, data) => solveBreakerSelection(inputs, data),
   warnings: (_inputs, outputs) => (outputs.rating === undefined ? ['error.noBreakerFitsInRange'] : []),
   references: ['EN 60898'],
+  chainTo: [
+    {
+      calculatorId: 'earth_loop',
+      labelKey: 'calc.earthLoop.title',
+      mapOutputs: (outputs) => ({ breakerRating: outputs.rating }),
+    },
+  ],
 };

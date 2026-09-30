@@ -1,5 +1,5 @@
 import type { ComponentType, ReactElement } from 'react';
-import { Zap, ArrowLeftRight, Cable, TrendingDown, Settings2, Power, Activity, Shield, Cpu } from 'lucide-react-native';
+import { Zap, ArrowLeftRight, Cable, TrendingDown, Settings2, Power, Activity, Shield, Cpu, Gauge, ShieldAlert, Repeat } from 'lucide-react-native';
 import ConduitFillSvg from '../../assets/icons/conduit-fill.svg';
 import PeConductorSvg from '../../assets/icons/pe-conductor.svg';
 
@@ -38,6 +38,11 @@ export const HOME_ICONS: Record<string, ComponentType<IconProps>> = {
   motor_current: Settings2,
   breaker_selection: Power,
   pe_conductor: PeConductorIcon,
+  power_factor: Activity,
+  pf_correction: Gauge,
+  transformer_rating: Cpu,
+  short_circuit: ShieldAlert,
+  earth_loop: Repeat,
   pulse: Activity,
   shield: Shield,
   transformer: Cpu,

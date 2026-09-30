@@ -27,9 +27,12 @@ const linear = (id: string, factor: number): UnitDef => ({ id, factor });
  */
 export const UNITS: Partial<Record<Quantity, UnitDef[]>> = {
   voltage: [linear('V', 1), linear('kV', 1000)],
-  current: [linear('A', 1), linear('mA', 0.001)],
+  current: [linear('A', 1), linear('mA', 0.001), linear('kA', 1000)],
   resistance: [linear('ohm', 1), linear('kohm', 1000)],
   power: [linear('W', 1), linear('kW', 1000)],
+  // S (VA) and Q (var) are distinct quantities from P (W) — same dimension, different meaning, so a field can't offer the wrong unit
+  apparentPower: [linear('VA', 1), linear('kVA', 1000), linear('MVA', 1000000)],
+  reactivePower: [linear('var', 1), linear('kvar', 1000)],
   length: [linear('m', 1), linear('ft', 0.3048), linear('mm', 0.001)],
   area: [linear('mm2', 1), linear('kcmil', 0.5067)],
   temperature: [
